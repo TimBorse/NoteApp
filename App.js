@@ -1,114 +1,93 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
-  SafeAreaView,
+  TouchableOpacity,
   StyleSheet,
-  ScrollView,
-  View,
   Text,
-  StatusBar,
+  View,
+  Image,
+  FlatList,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export default class App extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [
+        {
+          id: '0',
+          title: 'Starry Night',
+          content: <Text>Starry Night</Text>,
+        },
+        {
+          id: '1',
+          title: 'Wheat Field',
+          content: <Text>Wheat Field with Cypresses</Text>,
+        },
+        {
+          id: '2',
+          title: 'Bedroom in Arles',
+          content: <Text>Bedroom in Arles</Text>,
+        },
+      ],
+    };
+  }
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+  _renderItem = ({item, index}) => {
+    let {cardText, card, cardImage} = styles;
+    return (
+      <TouchableOpacity style={card}>
+        <Image
+          style={cardImage}
+          source={{
+            uri:
+              'https://cdn.pixabay.com/photo/2013/07/12/14/11/note-147951_960_720.png',
+          }}
+        />
+        <Text style={cardText}>{item.title}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  render() {
+    let {container} = styles;
+    let {items} = this.state;
+    return (
+      <FlatList
+        style={container}
+        data={items}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={this._renderItem}
+      />
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    marginTop: 40,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  cardText: {
+    fontSize: 30,
+    flex: 1,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  body: {
-    backgroundColor: Colors.white,
+  card: {
+    backgroundColor: '#d7d7d7',
+    marginBottom: 10,
+    marginLeft: '2%',
+    width: '96%',
+    shadowColor: '#000',
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  cardImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
   },
 });
-
-export default App;
