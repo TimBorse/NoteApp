@@ -14,7 +14,7 @@ function NavStack() {
     return (
         <Stack.Navigator
             screenOptions={{
-                headerTitleAlign: 'center',
+                headerShown: false,
                 headerStyle: {
                     backgroundColor: '#621FF7',
                 },
