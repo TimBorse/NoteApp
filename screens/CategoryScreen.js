@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {Header} from 'react-native-elements';
 
-class CategoryClass extends Component {
+export default class CategoryClass extends Component {
     constructor(props) {
         super(props);
 
@@ -37,7 +37,7 @@ class CategoryClass extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
-                    backgroundImage={require('./header_ohneText.png')}
+                    backgroundImage={require('../header_ohneText.png')}
                     leftComponent={{ icon: 'menu', color: '#fff', onPress: () => Alert.alert('Menu clicked') }}
                     centerComponent={{ text: 'Note App', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic', fontFamily:' '} }}
                     rightComponent={{ icon: 'home', color: '#fff',onPress: () => Alert.alert('Home clicked') }}
@@ -68,7 +68,7 @@ class CategoryClass extends Component {
                         // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
 
                         //You can use you project image Example below
-                        source={require('./add_icon_b.png')}
+                        source={require('../add_icon_b.png')}
                         style={styles.FloatingButtonStyle}
                     />
                 </TouchableOpacity>
@@ -122,21 +122,6 @@ const styles = StyleSheet.create({
     },
 });
 
-const styles = StyleSheet.create ({
-    container: {
-        padding: 12,
-        alignItems: 'center',
-    },
-    text: {
-        color: '#000000',
-        fontSize: 16,
-    },
-    separator: {
-        flex: 1,
-        height: StyleSheet.hairlineWidth,
-        backgroundColor: '#8E8E8E',
-    },
-})
 
 
 
