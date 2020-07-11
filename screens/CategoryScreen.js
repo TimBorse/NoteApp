@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff"
     },
     separator: {
-        height: 0.5, width: "100%", backgroundColor: "#6b3389"
+        height: 0.5, width: "100%", backgroundColor: "#000000"
     },
     rowViewContainer: {
         flex: 1,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontSize: 25,
         fontWeight: 'bold',
-        color:'#6b3389',
+        color:'#6268b8',
         marginLeft: 10,
     },
 });

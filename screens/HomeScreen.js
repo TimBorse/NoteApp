@@ -9,7 +9,7 @@ export default class HomeScreen extends Component {
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                 <Button
                     title="Go to Notes"
-                    onPress={() => this.props.navigation.navigate('Notes')}
+                    onPress={() => this.props.navigation.navigate('Categories')}
                 />
             </View>
         );
