@@ -1,93 +1,37 @@
-import React, {PureComponent} from 'react';
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-} from 'react-native';
+// App.js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default class App extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [
-        {
-          id: '0',
-          title: 'Starry Night',
-          content: <Text>Starry Night</Text>,
-        },
-        {
-          id: '1',
-          title: 'Wheat Field',
-          content: <Text>Wheat Field with Cypresses</Text>,
-        },
-        {
-          id: '2',
-          title: 'Bedroom in Arles',
-          content: <Text>Bedroom in Arles</Text>,
-        },
-      ],
-    };
-  }
+import NotesScreen from './screens/NotesScreen';
+import HomeScreen from './screens/HomeScreen';
 
-  _renderItem = ({item, index}) => {
-    let {cardText, card, cardImage} = styles;
+
+const Stack = createStackNavigator();
+
+function NavStack() {
     return (
-      <TouchableOpacity style={card}>
-        <Image
-          style={cardImage}
-          source={{
-            uri:
-              'https://cdn.pixabay.com/photo/2013/07/12/14/11/note-147951_960_720.png',
-          }}
-        />
-        <Text style={cardText}>{item.title}</Text>
-      </TouchableOpacity>
+        <Stack.Navigator
+            screenOptions={{
+                headerTitleAlign: 'center',
+                headerStyle: {
+                    backgroundColor: '#621FF7',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}>
+            <Stack.Screen name="Home" component={HomeScreen} options={{title: 'Home'}} />
+            <Stack.Screen name="Notes" component={NotesScreen} options={{title: 'Notes'}} />
+        </Stack.Navigator>
     );
-  };
-
-  render() {
-    let {container} = styles;
-    let {items} = this.state;
-    return (
-      <FlatList
-        style={container}
-        data={items}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={this._renderItem}
-      />
-    );
-  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-  },
-  cardText: {
-    fontSize: 30,
-    flex: 1,
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  card: {
-    backgroundColor: '#d7d7d7',
-    marginBottom: 10,
-    marginLeft: '2%',
-    width: '96%',
-    shadowColor: '#000',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 3,
-      height: 3,
-    },
-  },
-  cardImage: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
-  },
-});
+export default function App() {
+    return (
+        <NavigationContainer>
+            <NavStack />
+        </NavigationContainer>
+    );
+}
