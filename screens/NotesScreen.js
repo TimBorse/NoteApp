@@ -5,12 +5,26 @@ import {
     Text,
     View,
     ImageBackground,
-    FlatList,
+    FlatList, Image, Alert,
 } from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage';
+import {Header, Divider} from 'react-native-elements';
+
 export default class NotesScreen extends Component {
+    importData = async () => {
+        try {
+            const keys = await AsyncStorage.getAllKeys();
+            const result = await AsyncStorage.multiGet(keys);
+
+            return result.map(req => JSON.parse(req)).forEach(console.log);
+        } catch (error) {
+            console.error(error)
+        }
+    }
     constructor(props) {
         super(props);
+        let data = this.importData();
         this.state = {
             items: [
                 {
@@ -28,6 +42,11 @@ export default class NotesScreen extends Component {
                     title: 'Bedroom in Arles',
                     content: <Text>Bedroom in Arles</Text>,
                 },
+                {
+                    id: '3',
+                    title: 'Test',
+                    content: <Text>Test</Text>,
+                },
             ],
         };
     }
@@ -35,7 +54,9 @@ export default class NotesScreen extends Component {
     _renderItem = ({item, index}) => {
         let {titleText, contentText, card, cardImage} = styles;
         //ToDo: Redirection to actual note onclick
-        const redirect = () => this.props.navigation.navigate('Home');
+        const redirect = () => this.props.navigation.navigate('Test', {
+            id: item.id,
+        });
         return (
             <TouchableOpacity style={card} onPress={redirect}>
                 <ImageBackground
@@ -65,25 +86,58 @@ export default class NotesScreen extends Component {
     };
 
     render() {
-        let {container} = styles;
+        let {container, FloatingButtonStyle, TouchableOpacityStyle} = styles;
         let {items} = this.state;
+        //ToDo: Add correct Navigation
+        const createNewNote = () => this.props.navigation.navigate('Home');
         return (
-            <FlatList
-                style={container}
-                data={items}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={this._renderItem}
-            />
+            <View>
+                <Header
+                    backgroundImage={require('../header_ohneText.png')}
+                    leftComponent={{ icon: 'menu', color: '#fff', onPress: () =>  Alert.alert("Menu clicked!")}}
+                    centerComponent={{ text: 'Notes', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic', fontFamily:' '} }}
+                    rightComponent={{ icon: 'home', color: '#fff',onPress: () => this.props.navigation.navigate('Home') }}
+                    containerStyle={{
+                        backgroundColor: "transparent",
+                        justifyContent: "space-around"
+                    }}
+                />
+                <Divider style={{ backgroundColor: '#000000', height:2 }} />
+                <FlatList
+                    style={container}
+                    data={items}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={this._renderItem}
+                />
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={createNewNote}
+                    style={TouchableOpacityStyle}>
+                    <Image
+                        //We are making FAB using TouchableOpacity with an image
+                        //We are using online image here
+                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
+
+                        //You can use you project image Example below
+                        source={require('../add_icon_b.png')}
+                        style={FloatingButtonStyle}
+                    />
+                </TouchableOpacity>
+            </View>
+
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 40,
+        marginTop: 0,
+        backgroundColor: '#caebff',
+        marginBottom: 80,
     },
     titleText: {
         fontSize: 30,
+        fontWeight:"bold",
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center',
@@ -98,7 +152,7 @@ const styles = StyleSheet.create({
         marginLeft: '10%',
     },
     card: {
-        backgroundColor: '#fff',
+        backgroundColor: '#caebff',
         marginBottom: 10,
         marginLeft: '2%',
         width: '96%',
@@ -113,6 +167,23 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         resizeMode: 'cover',
+    },
+    TouchableOpacityStyle: {
+        position: 'absolute',
+        marginBottom: 80,
+        width: 50,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 30,
+        bottom: 30,
+    },
+
+    FloatingButtonStyle: {
+        resizeMode: 'contain',
+        width: 75,
+        height: 75,
+        //backgroundColor:'black'
     },
 });
 
