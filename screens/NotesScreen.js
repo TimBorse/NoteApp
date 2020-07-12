@@ -54,7 +54,7 @@ export default class NotesScreen extends Component {
     _renderItem = ({item, index}) => {
         let {titleText, contentText, card, cardImage} = styles;
         //ToDo: Redirection to actual note onclick
-        const redirect = () => this.props.navigation.navigate('Test', {
+        const redirect = () => this.props.navigation.navigate('Home', {
             id: item.id,
         });
         return (
@@ -89,7 +89,7 @@ export default class NotesScreen extends Component {
         let {container, FloatingButtonStyle, TouchableOpacityStyle} = styles;
         let {items} = this.state;
         //ToDo: Add correct Navigation
-        const createNewNote = () => this.props.navigation.navigate('Home');
+        const createNewNote = () => this.props.navigation.navigate('Editor');
         return (
             <View>
                 <Header

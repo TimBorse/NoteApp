@@ -1,97 +1,240 @@
-/*import React, {useState} from 'react';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
-export default function Editor() {
-    const [text, setText] = useState("")
-    const handleOnChange = (e,editor)=>{
-        const data = editor.getData()
-        setText(data)
-    }
-    return (
-        <div className="EditorScreen">
-            <div className="editor">
-            <h2>Note</h2>
-            <CKEditor
-                editor = {ClassicEditor}
-                data ={text}
-                onChange = {handleOnChange}
-            />
-            </div>
-            <div>
-                <h2>ContentTest</h2>
-                <p>{text}</p>
-            </div>
-        </div>
-    );
-}*/
-import React, { Component } from 'react';
+import React, { useState, useEffect, Component} from "react";
 import {
+    SafeAreaView,
     StyleSheet,
-    Text,
+    TouchableOpacity,
     View,
-    Platform
+    Text,
+    Platform, Image,
 } from 'react-native';
-import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+import KeyboardSpacer from "react-native-keyboard-spacer";
+import RNDraftView from "react-native-draftjs-editor";
+import {NavigationActions} from 'react-navigation';
+import {StackActions} from 'react-navigation';
+const ControlButton = ({ text, action, isActive }) => {
+    return (
+        <TouchableOpacity
+            style={[
+                styles.controlButtonContainer,
+                isActive ? { backgroundColor: "gold" } : {}
+            ]}
+            onPress={action}
+        >
+            <Text>{text}</Text>
+        </TouchableOpacity>
+    );
+};
 
-export default class EditorScreen extends Component {
+const EditorToolBar = ({
+                           activeStyles,
+                           blockType,
+                           toggleStyle,
+                           toggleBlockType
+                       }) => {
+    return (
+        <View style={styles.toolbarContainer}>
+            <ControlButton
+                text={"B"}
+                isActive={activeStyles.includes("BOLD")}
+                action={() => toggleStyle("BOLD")}
+            />
+            <ControlButton
+                text={"I"}
+                isActive={activeStyles.includes("ITALIC")}
+                action={() => toggleStyle("ITALIC")}
+            />
+            <ControlButton
+                text={"H"}
+                isActive={blockType === "header-one"}
+                action={() => toggleBlockType("header-one")}
+            />
+            <ControlButton
+                text={"ul"}
+                isActive={blockType === "unordered-list-item"}
+                action={() => toggleBlockType("unordered-list-item")}
+            />
+            <ControlButton
+                text={"ol"}
+                isActive={blockType === "ordered-list-item"}
+                action={() => toggleBlockType("ordered-list-item")}
+            />
+            <ControlButton
+                text={"--"}
+                isActive={activeStyles.includes("STRIKETHROUGH")}
+                action={() => toggleStyle("STRIKETHROUGH")}
+            />
+        </View>
+    );
+};
 
-    constructor(props) {
-        super(props);
-        this.getHTML = this.getHTML.bind(this);
-        this.setFocusHandlers = this.setFocusHandlers.bind(this);
+const styleMap = {
+    STRIKETHROUGH: {
+        textDecoration: "line-through"
     }
+};
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <RichTextEditor
-                    ref={(r)=>this.richtext = r}
-                    style={styles.richText}
-                    initialTitleHTML={'Title!!'}
-                    initialContentHTML={'Hello <b>World</b> <p>this is a new paragraph</p> <p>this is another new paragraph</p>'}
-                    editorInitializedCallback={() => this.onEditorInitialized()}
+/*class Editor {
+    _draftRef = React.createRef();
+    activeStyles = useState([]);
+    setActiveStyles = useState([]);
+    blockType  = useState("unstyled");
+    setActiveBlockType = useState("unstyled");
+    editorState = useState("");
+    setEditorState = useState("");
+    defaultValue = "";
+    editorLoaded = () => {
+        this._draftRef.current && this._draftRef.current.focus();
+    }
+    toggleStyle = style => {
+        this._draftRef.current && this._draftRef.current.setStyle(style);
+    }
+    toggleBlockType = blockType => {
+        this._draftRef.current && this._draftRef.current.setBlockType(blockType);
+    }
+    useEffect(() => {
+
+    this.setEditorState(this._draftRef.current ? this._draftRef.current.getEditorState() : "");
+}, [this._draftRef]);
+    render(){
+    return (
+        <SafeAreaView style={styles.containerStyle}>
+            <RNDraftView
+                defaultValue={defaultValue}
+                onEditorReady={this.editorLoaded}
+                style={{ flex: 1 }}
+                placeholder={"Insert your text here..."}
+                ref={this._draftRef}
+                onStyleChanged={this.setActiveStyles}
+                onBlockTypeChanged={this.setActiveBlockType}
+                styleMap={styleMap}
+            />
+            */
+/*
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={this.props.navigation.navigate('Home')}
+                style={styles.TouchableOpacityStyle}>
+                <Image
+                    //We are making FAB using TouchableOpacity with an image
+                    //We are using online image here
+                    // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
+
+                    //You can use you project image Example below
+                    source={require('../add_icon_b.png')}
+                    style={styles.FloatingButtonStyle}
                 />
-                <RichTextToolbar
-                    getEditor={() => this.richtext}
+            </TouchableOpacity>
+            <EditorToolBar
+                activeStyles={this.activeStyles}
+                blockType={this.blockType}
+                toggleStyle={this.toggleStyle}
+                toggleBlockType={this.toggleBlockType}
+            />
+            {Platform.OS === "ios" ? <KeyboardSpacer /> : null}
+        </SafeAreaView>
+    );
+    }
+}*/
+
+const EditorScreen = (props) => {
+    const _draftRef = React.createRef();
+    const [activeStyles, setActiveStyles] = useState([]);
+    const [blockType, setActiveBlockType] = useState("unstyled");
+    const [editorState, setEditorState] = useState("");
+
+    const defaultValue =
+        "";
+
+    const editorLoaded = () => {
+        _draftRef.current && _draftRef.current.focus();
+    };
+
+    const toggleStyle = style => {
+        _draftRef.current && _draftRef.current.setStyle(style);
+    };
+
+    const toggleBlockType = blockType => {
+        _draftRef.current && _draftRef.current.setBlockType(blockType);
+    };
+
+    useEffect(() => {
+        /**
+         * Get the current editor state in HTML.
+         * Usually keep it in the submit or next action to get output after user has typed.
+         */
+        setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : "");
+    }, [_draftRef]);
+    console.log(editorState);
+
+    return (
+        <SafeAreaView style={styles.containerStyle}>
+            <RNDraftView
+                defaultValue={defaultValue}
+                onEditorReady={editorLoaded}
+                style={{ flex: 1 }}
+                placeholder={"Insert your text here..."}
+                ref={_draftRef}
+                onStyleChanged={setActiveStyles}
+                onBlockTypeChanged={setActiveBlockType}
+                styleMap={styleMap}
+            />
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {props.navigation.goBack()}}
+                style={styles.TouchableOpacityStyle}>
+                <Image
+                    //We are making FAB using TouchableOpacity with an image
+                    //We are using online image here
+                    // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
+
+                    //You can use you project image Example below
+                    source={require('../saveButton.png')}
+                    style={styles.FloatingButtonStyle}
                 />
-                {Platform.OS === 'ios' && <KeyboardSpacer/>}
-            </View>
-        );
-    }
-
-    onEditorInitialized() {
-        this.setFocusHandlers();
-        this.getHTML();
-    }
-
-    async getHTML() {
-        const titleHtml = await this.richtext.getTitleHtml();
-        const contentHtml = await this.richtext.getContentHtml();
-        //alert(titleHtml + ' ' + contentHtml)
-    }
-
-    setFocusHandlers() {
-        this.richtext.setTitleFocusHandler(() => {
-            //alert('title focus');
-        });
-        this.richtext.setContentFocusHandler(() => {
-            //alert('content focus');
-        });
-    }
-}
+            </TouchableOpacity>
+            <EditorToolBar
+                activeStyles={activeStyles}
+                blockType={blockType}
+                toggleStyle={toggleStyle}
+                toggleBlockType={toggleBlockType}
+            />
+            {Platform.OS === "ios" ? <KeyboardSpacer /> : null}
+        </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
-    container: {
+    containerStyle: {
         flex: 1,
-        flexDirection: 'column',
-        backgroundColor: '#ffffff',
-        paddingTop: 40
+        marginTop: 36
     },
-    richText: {
-        alignItems:'center',
+    toolbarContainer: {
+        height: 56,
+        flexDirection: "row",
+        backgroundColor: "silver",
+        alignItems: "center",
+        justifyContent: "space-around"
+    },
+    controlButtonContainer: {
+        padding: 8,
+        borderRadius: 2
+    },
+    TouchableOpacityStyle: {
+        position: 'absolute',
+        marginBottom: 80,
+        width: 50,
+        height: 50,
+        alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'transparent',
+        right: 30,
+        bottom: 30,
+    },
+    FloatingButtonStyle: {
+        resizeMode: 'contain',
+        width: 75,
+        height: 75,
+        //backgroundColor:'black'
     },
 });
+
+export default EditorScreen

@@ -6,9 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import NotesScreen from './screens/NotesScreen';
 import HomeScreen from './screens/HomeScreen';
 import CategoryScreen from './screens/CategoryScreen';
-import TestScreen from './screens/TestScreen';
-
-//import EditorScreen from './screens/EditorScreen';
+import EditorScreen from './screens/EditorScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,8 +26,7 @@ function NavStack() {
             <Stack.Screen name="Home" component={HomeScreen} options={{title: 'Home'}} />
             <Stack.Screen name="Notes" component={NotesScreen} options={{title: 'Notes'}} />
             <Stack.Screen name="Categories" component={CategoryScreen} options={{title: 'Categories'}} />
-            {/*<Stack.Screen name="Editor" component={EditorScreen} options={{title: 'Editor'}} />*/}
-            <Stack.Screen name="Test" component={TestScreen} options={{title: 'Test'}} />
+            <Stack.Screen name="Editor" component={EditorScreen} options={{title: 'Editor'}} />
         </Stack.Navigator>
     );
 }
