@@ -11,44 +11,46 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import {Header, Divider} from 'react-native-elements';
 
+function sleep(milliseconds) {
+    console.log("Zzzzzzzzz");
+    const date = Date.now();
+    let currentDate = null;
+    do {
+        currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+}
+
 export default class NotesScreen extends Component {
+    items = [];
     importData = async () => {
         try {
-            const keys = await AsyncStorage.getAllKeys();
-            const result = await AsyncStorage.multiGet(keys);
+            var keys = await AsyncStorage.getAllKeys();
+            for (var i = 0; i < keys.length; i++) {
+                let key = keys[i];
+                let value = await AsyncStorage.getItem(keys[i]);
+                console.log(key + " " + value);
+                this.items.push({
+                    title: key,
+                    content: value
+                });
+            }
 
-            return result.map(req => JSON.parse(req)).forEach(console.log);
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
+        this.setState({items: this.items});
+
     }
+
     constructor(props) {
         super(props);
-        let data = this.importData();
-        this.state = {
-            items: [
-                {
-                    id: '0',
-                    title: 'Starry Night',
-                    content: <Text>Starry Night</Text>,
-                },
-                {
-                    id: '1',
-                    title: 'Wheat Field',
-                    content: <Text>Wheat Field with Cypresses</Text>,
-                },
-                {
-                    id: '2',
-                    title: 'Bedroom in Arles',
-                    content: <Text>Bedroom in Arles</Text>,
-                },
-                {
-                    id: '3',
-                    title: 'Test',
-                    content: <Text>Test</Text>,
-                },
-            ],
-        };
+        this.state = {items: this.items};
+        this.importData();
+        /*this.state = {
+                items: this.items
+        };*/
+
+
     }
 
     _renderItem = ({item, index}) => {
@@ -77,7 +79,7 @@ export default class NotesScreen extends Component {
                         }}>
                         <Text style={titleText}>{item.title}</Text>
                         <Text style={contentText}>
-                            haasheasasagnfaignagnaigaigangaiagvggggggggggggggggggggggggggggggghghahahshsahesahsehsehgsehsehshshshsehshjsjsdrjsdrjsdrjsdjsjhsrhdsgshdshshjsjsdjsdjsjhsshswehesaghagagaeasghsaegggggggggggggggggggggggggggggggggggggggggggggggggk
+                            {item.content}
                         </Text>
                     </View>
                 </ImageBackground>

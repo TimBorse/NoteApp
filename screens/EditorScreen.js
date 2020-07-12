@@ -9,8 +9,10 @@ import {
     Platform, Image,
 } from 'react-native';
 import KeyboardSpacer from "react-native-keyboard-spacer";
-import RNDraftView from "react-native-draftjs-editor";
+import RNDraftView, {getEditorState} from "react-native-draftjs-editor";
 import AsyncStorage from '@react-native-community/async-storage';
+
+
 const ControlButton = ({ text, action, isActive }) => {
     return (
         <TouchableOpacity
@@ -165,12 +167,14 @@ const EditorScreen = (props) => {
         setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : "");
     }, [_draftRef]);
     console.log(editorState);
-
+    const[title, setTitle] = useState("");
     return (
         <SafeAreaView style={styles.containerStyle}>
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 placeholder={"Title"}
+                onChangeText={(title) => setTitle({title})}
+                value={title}
             />
             <RNDraftView
                 defaultValue={defaultValue}
@@ -184,7 +188,7 @@ const EditorScreen = (props) => {
             />
             <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => saveData(props)}
+                onPress={() => saveData(props, title, _draftRef.current.getEditorState().toString())}
                 style={styles.TouchableOpacityStyle}>
                 <Image
                     //We are making FAB using TouchableOpacity with an image
@@ -207,12 +211,21 @@ const EditorScreen = (props) => {
     );
 };
 
-const saveData = (props) => {
+async function saveData(props, title, data){
     try{
+        var str = title.title;
+        await AsyncStorage.setItem(str, data.toString());
     }catch (err){
         console.log(err);
     }
-    props.navigation.goBack();
+    /*let resData = await AsyncStorage.getItem(title.toString());
+    props.navigation.navigate(
+        'Test',
+        {
+            title: title,
+            data: resData
+        }
+    );*/
 }
 
 const styles = StyleSheet.create({
