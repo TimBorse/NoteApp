@@ -5,12 +5,12 @@ import {
     TouchableOpacity,
     View,
     Text,
+    TextInput,
     Platform, Image,
 } from 'react-native';
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import RNDraftView from "react-native-draftjs-editor";
-import {NavigationActions} from 'react-navigation';
-import {StackActions} from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
 const ControlButton = ({ text, action, isActive }) => {
     return (
         <TouchableOpacity
@@ -168,6 +168,10 @@ const EditorScreen = (props) => {
 
     return (
         <SafeAreaView style={styles.containerStyle}>
+            <TextInput
+                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                placeholder={"Title"}
+            />
             <RNDraftView
                 defaultValue={defaultValue}
                 onEditorReady={editorLoaded}
@@ -180,7 +184,7 @@ const EditorScreen = (props) => {
             />
             <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => {props.navigation.goBack()}}
+                onPress={() => saveData(props)}
                 style={styles.TouchableOpacityStyle}>
                 <Image
                     //We are making FAB using TouchableOpacity with an image
@@ -202,6 +206,14 @@ const EditorScreen = (props) => {
         </SafeAreaView>
     );
 };
+
+const saveData = (props) => {
+    try{
+    }catch (err){
+        console.log(err);
+    }
+    props.navigation.goBack();
+}
 
 const styles = StyleSheet.create({
     containerStyle: {
