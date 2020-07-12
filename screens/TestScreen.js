@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import RNDraftView from "react-native-draftjs-editor";
+
 const ControlButton = ({ text, action, isActive }) => {
     return (
         <TouchableOpacity
