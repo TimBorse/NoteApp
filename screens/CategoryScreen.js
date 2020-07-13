@@ -66,8 +66,8 @@ export default class CategoryClass extends Component {
         console.log(item.category);
         let {contentText,card} = styles;
         //ToDo: Redirection to actual note onclick
-        const redirect = () => this.props.navigation.navigate('Home', {
-            id: item.id,
+        const redirect = () => this.props.navigation.navigate('Notes', {
+            category: item.category,
         });
         return (
                 <TouchableOpacity style={card} onPress={redirect}>

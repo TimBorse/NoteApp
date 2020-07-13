@@ -89,8 +89,6 @@ const EditorScreen = (props) => {
     if(id != undefined){
         getData(id);
         initTitle=id.split('-')[1];
-    }else{
-        console.log("KEINE ID");
     }
     const[title, setTitle] = useState(initTitle);
 
@@ -171,7 +169,9 @@ async function saveData(props, title, category, data){
         str += "-";
         str += category;
         await AsyncStorage.setItem(str, data.toString());
-        props.navigation.goBack();
+        props.navigation.navigate('Notes', {
+            category: category
+        });
     }catch (err){
         console.log(err);
     }

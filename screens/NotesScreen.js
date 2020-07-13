@@ -5,24 +5,26 @@ import {
     Text,
     View,
     ImageBackground,
-    FlatList, Image, Alert, Dimensions, StatusBar,
+    FlatList, Image, Alert,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import {Header, Divider} from 'react-native-elements';
 
 export default class NotesScreen extends Component {
-    items = [];
+    items=[];
     categorie;
+    focusListener;
+
     importData = async () => {
         try {
+            this.items=[];
             var keys = await AsyncStorage.getAllKeys();
             for (var i = 0; i < keys.length; i++) {
                 let key = keys[i];
                 if(key.startsWith("Note")){
                     let value = await AsyncStorage.getItem(keys[i]);
                     let title = key.split('-')[1];
-                    console.log(key);
                     this.items.push({
                         title: title,
                         content: value,
@@ -42,8 +44,11 @@ export default class NotesScreen extends Component {
     constructor(props) {
         super(props);
         this.categorie = props.route.params.categorie;
+        this.focusListener = props.navigation.addListener('focus', () => {
+            this.importData();
+            this.render();
+        })
         this.state = {items: this.items};
-        this.importData();
     }
 
     _renderItem = ({item, index}) => {
