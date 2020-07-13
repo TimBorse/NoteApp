@@ -5,35 +5,32 @@ import {
     Text,
     View,
     ImageBackground,
-    FlatList, Image, Alert,
+    FlatList, Image, Alert, Dimensions, StatusBar,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import {Header, Divider} from 'react-native-elements';
 
-function sleep(milliseconds) {
-    console.log("Zzzzzzzzz");
-    const date = Date.now();
-    let currentDate = null;
-    do {
-        currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
-}
-
 export default class NotesScreen extends Component {
     items = [];
+    categorie;
     importData = async () => {
         try {
             var keys = await AsyncStorage.getAllKeys();
             for (var i = 0; i < keys.length; i++) {
                 let key = keys[i];
-                let value = await AsyncStorage.getItem(keys[i]);
-                console.log(key + " " + value);
-                this.items.push({
-                    title: key,
-                    content: value
-                });
+                if(key.startsWith("Note")){
+                    let value = await AsyncStorage.getItem(keys[i]);
+                    let title = key.split('-')[1];
+                    console.log(key);
+                    this.items.push({
+                        title: title,
+                        content: value,
+                        id: key,
+                    });
+                }
             }
+
 
         } catch (error) {
             console.error(error);
@@ -44,20 +41,17 @@ export default class NotesScreen extends Component {
 
     constructor(props) {
         super(props);
+        this.categorie = props.route.params.categorie;
         this.state = {items: this.items};
         this.importData();
-        /*this.state = {
-                items: this.items
-        };*/
-
-
     }
 
     _renderItem = ({item, index}) => {
         let {titleText, contentText, card, cardImage} = styles;
         //ToDo: Redirection to actual note onclick
-        const redirect = () => this.props.navigation.navigate('Home', {
+        const redirect = () => this.props.navigation.navigate('Editor', {
             id: item.id,
+            categorie: this.categorie,
         });
         return (
             <TouchableOpacity style={card} onPress={redirect}>
@@ -91,9 +85,13 @@ export default class NotesScreen extends Component {
         let {container, FloatingButtonStyle, TouchableOpacityStyle} = styles;
         let {items} = this.state;
         //ToDo: Add correct Navigation
-        const createNewNote = () => this.props.navigation.navigate('Editor');
+        const createNewNote = () => this.props.navigation.navigate('Editor', {
+            categorie: this.categorie,
+        });
         return (
-            <View>
+            <View
+                style={{
+                    height: '100%'}}>
                 <Header
                     backgroundImage={require('../header_ohneText.png')}
                     leftComponent={{ icon: 'menu', color: '#fff', onPress: () =>  Alert.alert("Menu clicked!")}}

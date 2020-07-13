@@ -75,77 +75,25 @@ const styleMap = {
     }
 };
 
-/*class Editor {
-    _draftRef = React.createRef();
-    activeStyles = useState([]);
-    setActiveStyles = useState([]);
-    blockType  = useState("unstyled");
-    setActiveBlockType = useState("unstyled");
-    editorState = useState("");
-    setEditorState = useState("");
-    defaultValue = "";
-    editorLoaded = () => {
-        this._draftRef.current && this._draftRef.current.focus();
-    }
-    toggleStyle = style => {
-        this._draftRef.current && this._draftRef.current.setStyle(style);
-    }
-    toggleBlockType = blockType => {
-        this._draftRef.current && this._draftRef.current.setBlockType(blockType);
-    }
-    useEffect(() => {
-
-    this.setEditorState(this._draftRef.current ? this._draftRef.current.getEditorState() : "");
-}, [this._draftRef]);
-    render(){
-    return (
-        <SafeAreaView style={styles.containerStyle}>
-            <RNDraftView
-                defaultValue={defaultValue}
-                onEditorReady={this.editorLoaded}
-                style={{ flex: 1 }}
-                placeholder={"Insert your text here..."}
-                ref={this._draftRef}
-                onStyleChanged={this.setActiveStyles}
-                onBlockTypeChanged={this.setActiveBlockType}
-                styleMap={styleMap}
-            />
-            */
-/*
-            <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={this.props.navigation.navigate('Home')}
-                style={styles.TouchableOpacityStyle}>
-                <Image
-                    //We are making FAB using TouchableOpacity with an image
-                    //We are using online image here
-                    // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
-
-                    //You can use you project image Example below
-                    source={require('../add_icon_b.png')}
-                    style={styles.FloatingButtonStyle}
-                />
-            </TouchableOpacity>
-            <EditorToolBar
-                activeStyles={this.activeStyles}
-                blockType={this.blockType}
-                toggleStyle={this.toggleStyle}
-                toggleBlockType={this.toggleBlockType}
-            />
-            {Platform.OS === "ios" ? <KeyboardSpacer /> : null}
-        </SafeAreaView>
-    );
-    }
-}*/
+var defaultValue = "";
+var id;
+var initTitle = "";
 
 const EditorScreen = (props) => {
     const _draftRef = React.createRef();
     const [activeStyles, setActiveStyles] = useState([]);
     const [blockType, setActiveBlockType] = useState("unstyled");
     const [editorState, setEditorState] = useState("");
+    const category = props.route.params.categorie;
+    id = props.route.params.id;
+    if(id != undefined){
+        getData(id);
+        initTitle=id.split('-')[1];
+    }else{
+        console.log("KEINE ID");
+    }
+    const[title, setTitle] = useState(initTitle);
 
-    const defaultValue =
-        "";
 
     const editorLoaded = () => {
         _draftRef.current && _draftRef.current.focus();
@@ -166,15 +114,13 @@ const EditorScreen = (props) => {
          */
         setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : "");
     }, [_draftRef]);
-    console.log(editorState);
-    const[title, setTitle] = useState("");
     return (
         <SafeAreaView style={styles.containerStyle}>
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 placeholder={"Title"}
                 onChangeText={(title) => setTitle({title})}
-                value={title}
+                defaultValue={title}
             />
             <RNDraftView
                 defaultValue={defaultValue}
@@ -188,7 +134,7 @@ const EditorScreen = (props) => {
             />
             <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => saveData(props, title, _draftRef.current.getEditorState().toString())}
+                onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString())}
                 style={styles.TouchableOpacityStyle}>
                 <Image
                     //We are making FAB using TouchableOpacity with an image
@@ -211,21 +157,33 @@ const EditorScreen = (props) => {
     );
 };
 
-async function saveData(props, title, data){
+async function saveData(props, title, category, data){
     try{
-        var str = title.title;
+        var resTitle = title.title;
+        if(id!=undefined){
+            await AsyncStorage.removeItem(id);
+        }
+        if(resTitle == undefined){
+            resTitle = initTitle;
+        }
+        var str = "Note-";
+        str += resTitle;
+        str += "-";
+        str += category;
         await AsyncStorage.setItem(str, data.toString());
+        props.navigation.goBack();
     }catch (err){
         console.log(err);
     }
-    /*let resData = await AsyncStorage.getItem(title.toString());
-    props.navigation.navigate(
-        'Test',
-        {
-            title: title,
-            data: resData
-        }
-    );*/
+}
+
+async function getData(id){
+    try{
+        const data = await AsyncStorage.getItem(id);
+        defaultValue = data;
+    }catch (err){
+        console.log(err);
+    }
 }
 
 const styles = StyleSheet.create({
@@ -258,7 +216,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         width: 75,
         height: 75,
-        //backgroundColor:'black'
     },
 });
 
