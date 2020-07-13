@@ -27,7 +27,9 @@ export default class CategoryClass extends Component {
     }
 
     getListViewItem = (rowData) => {
-        Alert.alert(rowData);
+        this.props.navigation.navigate('Notes', {
+            categorie: rowData,
+        });
     }
     clickHandler = () => {
         //function to handle click on floating Action Button
