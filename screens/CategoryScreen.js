@@ -7,7 +7,7 @@ import {
     Alert,
     Image, TextInput, FlatList,
 } from 'react-native';
-import { Header} from 'react-native-elements';
+import {Button, Header} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -44,6 +44,7 @@ export default class CategoryClass extends Component {
 
     importData = async () => {
         try {
+            this.items = [];
             var keys = await AsyncStorage.getAllKeys();
             for (var i = 0; i < keys.length; i++) {
                 let key = keys[i];
@@ -112,24 +113,24 @@ export default class CategoryClass extends Component {
                 </TouchableOpacity>
                 <Modal animationIn="slideInUp" animationOut="slideOutDown"
                        isVisible={this.state.isModalVisible}
-                       style={{backgroundColor:'white' }}>
-                    <View style={{ flex: 1,justifyContent:'center'}}>
+                       >
+                    <View style={styles.modalView}>
                         <Text>Category Name:</Text>
                         <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                            style={{ height: 40, width:300, borderColor: 'gray', borderWidth: 1, marginBottom:30, marginTop:20, }}
                             onChangeText={this.setText}
                         />
-                        <View style={{ flex: 1,justifyContent:'center',position:'absolute',bottom:0}}>
+                        <View style={{ flex: 1,justifyContent:'center',position:'absolute',bottom:0, marginBottom:10 }}>
                             <View style={{flexDirection:'row',}}>
                                 <TouchableOpacity
-                                    style={{backgroundColor:'green',width:'50%'}}
+                                    style={{backgroundColor:'#81f681',width:'50%'}}
                                     onPress={() => {saveData(this.props, this.state.category, this.state.category); this.closeModal();}}>
-                                    <Text style={{color:'white',textAlign:'center',padding:10}}>Save</Text>
+                                    <Text style={{color:'black',textAlign:'center',padding:10}}>Save</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    style={{backgroundColor:'red',width:'50%'}}
+                                    style={{backgroundColor:'#f89494',width:'50%', type:"outline"}}
                                     onPress={()=>this.closeModal()}>
-                                    <Text style={{color:'white',textAlign:'center',padding:10}}>Cancel</Text>
+                                    <Text style={{color:'black',textAlign:'center',padding:10}}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -185,6 +186,21 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 0.5, width: "100%", backgroundColor: "#000000"
+    },
+    modalView:{
+        backgroundColor: "white",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent:"center",
+        padding: 35,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
     },
     contentText: {
         fontSize: 20,
