@@ -172,7 +172,7 @@ const EditorScreen = (props) => {
 };
 
 function navigateToImage(props){
-    props.navigation.navigate('Home');
+    props.navigation.navigate('Image');
 }
 
 
