@@ -243,8 +243,8 @@ const styles = StyleSheet.create({
     },
     FloatingButtonStyle: {
         resizeMode: 'contain',
-        width: 75,
-        height: 75,
+        width: 55,
+        height: 55,
     },logo: {
         width: 66,
         height: 58,
