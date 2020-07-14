@@ -10,6 +10,8 @@ import {
 
 import AsyncStorage from '@react-native-community/async-storage';
 import {Header, Divider} from 'react-native-elements';
+import HtmlText from 'react-native-html-to-text';
+import WebView from 'react-native-webview';
 
 export default class NotesScreen extends Component {
     items=[];
@@ -22,13 +24,13 @@ export default class NotesScreen extends Component {
             var keys = await AsyncStorage.getAllKeys();
             for (var i = 0; i < keys.length; i++) {
                 let key = keys[i];
-                //console.log(key);
-                if(key.startsWith("Note") && key.split('-')[2] == this.category){
+                if(key.startsWith("Note") && key.split('-')[2] === this.category){
                     let value = await AsyncStorage.getItem(keys[i]);
+                    let styledValue = "<style> body {font-size: 40px;}h1 {font-size: 70px;}</style>" + value;
                     let title = key.split('-')[1];
                     this.items.push({
                         title: title,
-                        content: value,
+                        content: styledValue,
                         id: key,
                     });
                 }
@@ -62,10 +64,7 @@ export default class NotesScreen extends Component {
         return (
             <TouchableOpacity style={card} onPress={redirect}>
                 <ImageBackground
-                    source={{
-                        uri:
-                            'https://cdn.pixabay.com/photo/2013/07/12/14/11/note-147951_960_720.png',
-                    }}
+                    source={require('../note.png')}
                     style={cardImage}>
                     <View
                         style={{
@@ -74,13 +73,14 @@ export default class NotesScreen extends Component {
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            marginLeft: '10%',
+                            marginRight: '10%',
                         }}>
                         <Text style={titleText}>{item.title}</Text>
-                        <Text style={contentText}>
-                            {item.content}
-                        </Text>
+                        <WebView  style={{
+                            backgroundColor: '#f6ea8c'
+                        }} source={{html: item.content}} />
                     </View>
                 </ImageBackground>
             </TouchableOpacity>
@@ -91,8 +91,8 @@ export default class NotesScreen extends Component {
         let {container, FloatingButtonStyle, TouchableOpacityStyle} = styles;
         let {items} = this.state;
         //ToDo: Add correct Navigation
-        console.log("NOTE CAT:"+this.category);
         const createNewNote = () => this.props.navigation.navigate('Editor', {
+            id: "",
             category: this.category,
         });
         return (
@@ -150,13 +150,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     contentText: {
-        fontSize: 20,
-        flex: 1,
-        textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
+        textAlign: 'left',
         marginRight: '10%',
         marginLeft: '10%',
+        marginBottom: '10%',
     },
     card: {
         backgroundColor: '#caebff',

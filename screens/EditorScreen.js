@@ -12,6 +12,7 @@ import KeyboardSpacer from "react-native-keyboard-spacer";
 import RNDraftView, {getEditorState} from "react-native-draftjs-editor";
 import AsyncStorage from '@react-native-community/async-storage';
 
+var focusListener;
 
 const ControlButton = ({ text, action, isActive }) => {
     return (
@@ -78,14 +79,14 @@ const styleMap = {
 var defaultValue = "";
 var id;
 var initTitle = "";
+var category;
 
 const EditorScreen = (props) => {
     const _draftRef = React.createRef();
     const [activeStyles, setActiveStyles] = useState([]);
     const [blockType, setActiveBlockType] = useState("unstyled");
     const [editorState, setEditorState] = useState("");
-    const category = props.route.params.category;
-    console.log("CAT:" + category);
+    category = props.route.params.category;
     id = props.route.params.id;
     if(id != undefined){
         getData(id);
