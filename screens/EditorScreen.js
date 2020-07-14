@@ -11,9 +11,7 @@ import {
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import RNDraftView, {getEditorState} from "react-native-draftjs-editor";
 import AsyncStorage from '@react-native-community/async-storage';
-import ImagePicker from 'react-native-image-picker';
 
-var imageArray = [];
 const ControlButton = ({ text, action, isActive }) => {
     return (
         <TouchableOpacity
@@ -135,7 +133,7 @@ const EditorScreen = (props) => {
             <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={props.navigation.navigate('Image')}
+                    onPress={() => navigateToImage(props)}
                     style={styles.ImageOpacityStyle}>
                     <Image
                         //We are making FAB using TouchableOpacity with an image
@@ -172,6 +170,10 @@ const EditorScreen = (props) => {
         </SafeAreaView>
     );
 };
+
+function navigateToImage(props){
+    props.navigation.navigate('Home');
+}
 
 
 async function saveData(props, title, category, data){
@@ -248,16 +250,5 @@ const styles = StyleSheet.create({
         height: 58,
     },
 });
-
-// More info on all the options is below in the API Reference... just some common use cases shown here
-const options = {
-    title: 'Select Image',
-    storageOptions: {
-        skipBackup: true,
-        path: 'images',
-    },
-};
-
-
 
 export default EditorScreen

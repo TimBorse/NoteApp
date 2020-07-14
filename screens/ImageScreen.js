@@ -2,10 +2,11 @@ import Gallery from 'react-native-image-gallery';
 import ImagePicker from 'react-native-image-picker';
 import {Component, useState} from 'react';
 
+
 export default class ImageScreen extends Component{
     render() {
-        return (
-            <Gallery
+        return (<View></View>);}
+          /*  <Gallery
                 style={{ flex: 1, backgroundColor: 'black' }}
                 images={[
                     { source: { uri: 'http://i.imgur.com/XP2BE7q.jpg' } },
@@ -15,9 +16,9 @@ export default class ImageScreen extends Component{
                 ]}
             />
         );
-    }
+    }*/
 }
-
+/*
 function openImagePicker(){
     ImagePicker.showImagePicker(options, (response) => {
         console.log('Response = ', response);
@@ -34,5 +35,5 @@ function openImagePicker(){
             imageArray.push(source);
             setSource(imageArray);
         }
-    });
-}
+    });*/
+//}
