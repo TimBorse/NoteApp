@@ -79,8 +79,11 @@ export default class NotesScreen extends Component {
                         }}>
                         <Text style={titleText}>{item.title}</Text>
                         <WebView  style={{
-                            backgroundColor: '#f6ea8c'
-                        }} source={{html: item.content}} />
+                            backgroundColor: '#f6ea8c',
+                        }}
+                                  showsHorizontalScrollIndicator={false}
+                                  showsVerticalScrollIndicator ={false}
+                                  source={{html: item.content}} />
                     </View>
                 </ImageBackground>
             </TouchableOpacity>

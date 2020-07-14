@@ -6,14 +6,14 @@ import {
     View,
     Text,
     TextInput,
-    Platform, Image,
+    Platform, Image, Button,
 } from 'react-native';
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import RNDraftView, {getEditorState} from "react-native-draftjs-editor";
 import AsyncStorage from '@react-native-community/async-storage';
+import ImagePicker from 'react-native-image-picker';
 
-var focusListener;
-
+var imageArray = [];
 const ControlButton = ({ text, action, isActive }) => {
     return (
         <TouchableOpacity
@@ -132,20 +132,36 @@ const EditorScreen = (props) => {
                 onBlockTypeChanged={setActiveBlockType}
                 styleMap={styleMap}
             />
-            <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString())}
-                style={styles.TouchableOpacityStyle}>
-                <Image
-                    //We are making FAB using TouchableOpacity with an image
-                    //We are using online image here
-                    // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
+            <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={props.navigation.navigate('Image')}
+                    style={styles.ImageOpacityStyle}>
+                    <Image
+                        //We are making FAB using TouchableOpacity with an image
+                        //We are using online image here
+                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
 
-                    //You can use you project image Example below
-                    source={require('../saveButton.png')}
-                    style={styles.FloatingButtonStyle}
-                />
-            </TouchableOpacity>
+                        //You can use you project image Example below
+                        source={require('../saveButton.png')}
+                        style={styles.FloatingButtonStyle}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString())}
+                    style={styles.TouchableOpacityStyle}>
+                    <Image
+                        //We are making FAB using TouchableOpacity with an image
+                        //We are using online image here
+                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
+
+                        //You can use you project image Example below
+                        source={require('../saveButton.png')}
+                        style={styles.FloatingButtonStyle}
+                    />
+                </TouchableOpacity>
+            </View>
             <EditorToolBar
                 activeStyles={activeStyles}
                 blockType={blockType}
@@ -156,6 +172,7 @@ const EditorScreen = (props) => {
         </SafeAreaView>
     );
 };
+
 
 async function saveData(props, title, category, data){
     try{
@@ -206,7 +223,6 @@ const styles = StyleSheet.create({
     },
     TouchableOpacityStyle: {
         position: 'absolute',
-        marginBottom: 80,
         width: 50,
         height: 50,
         alignItems: 'center',
@@ -214,11 +230,34 @@ const styles = StyleSheet.create({
         right: 30,
         bottom: 30,
     },
+    ImageOpacityStyle: {
+        position: 'absolute',
+        width: 50,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        left: 30,
+        bottom: 30,
+    },
     FloatingButtonStyle: {
         resizeMode: 'contain',
         width: 75,
         height: 75,
+    },logo: {
+        width: 66,
+        height: 58,
     },
 });
+
+// More info on all the options is below in the API Reference... just some common use cases shown here
+const options = {
+    title: 'Select Image',
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
+
+
 
 export default EditorScreen
