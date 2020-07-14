@@ -141,7 +141,7 @@ const EditorScreen = (props) => {
                         // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
 
                         //You can use you project image Example below
-                        source={require('../saveButton.png')}
+                        source={require('../gallery_icon.png')}
                         style={styles.FloatingButtonStyle}
                     />
                 </TouchableOpacity>
@@ -155,7 +155,7 @@ const EditorScreen = (props) => {
                         // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
 
                         //You can use you project image Example below
-                        source={require('../saveButton.png')}
+                        source={require('../save_icon.png')}
                         style={styles.FloatingButtonStyle}
                     />
                 </TouchableOpacity>

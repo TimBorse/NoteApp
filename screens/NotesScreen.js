@@ -35,8 +35,6 @@ export default class NotesScreen extends Component {
                     });
                 }
             }
-
-
         } catch (error) {
             console.error(error);
         }

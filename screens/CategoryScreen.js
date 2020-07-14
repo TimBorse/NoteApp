@@ -7,7 +7,7 @@ import {
     Alert,
     Image, TextInput, FlatList,
 } from 'react-native';
-import {Button, Header} from 'react-native-elements';
+import {Header} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -65,18 +65,18 @@ export default class CategoryClass extends Component {
 
     _renderItem = ({item, index}) => {
         console.log(item.category);
-        let {contentText,card} = styles;
+        let {contentText,card, cardImage} = styles;
         //ToDo: Redirection to actual note onclick
         const redirect = () => this.props.navigation.navigate('Notes', {
             category: item.category,
         });
         return (
                 <TouchableOpacity style={card} onPress={redirect}>
-                    <View>
-                        <Text style={contentText}>
-                            {item.category}
-                        </Text>
-                    </View>
+                        <View style={card}>
+                            <Text style={contentText}>
+                                {item.category}
+                            </Text>
+                        </View>
                 </TouchableOpacity>
         );
     };
@@ -88,8 +88,8 @@ export default class CategoryClass extends Component {
             <View style={styles.MainContainer}>
                 <Header
                     backgroundImage={require('../header_ohneText.png')}
-                    leftComponent={{ icon: 'menu', color: '#fff', onPress: () => Alert.alert('Menu clicked') }}
-                    centerComponent={{ text: 'Note App', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontFamily:'Roboto'} }}
+                    leftComponent={{ color: '#fff', onPress: () => Alert.alert('Menu clicked') }}
+                    centerComponent={{ text: 'Categories', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontFamily:'Roboto'} }}
                     rightComponent={{ icon: 'home', color: '#fff',onPress: () => Alert.alert('Home clicked') }}
                     containerStyle={{
                         backgroundColor: "transparent",
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     contentText: {
-        fontSize: 20,
+        fontSize: 25,
         flex: 1,
         textAlign: 'center',
         alignItems: 'center',
@@ -213,8 +213,9 @@ const styles = StyleSheet.create({
         color: "#000000",
     },
     card: {
-        backgroundColor: '#caebff',
-        marginBottom: 10,
+        backgroundColor: '#c1c3e7',
+        marginBottom: 5,
+        marginTop: 5,
         marginLeft: '2%',
         width: '96%',
         shadowColor: '#000',
@@ -223,6 +224,7 @@ const styles = StyleSheet.create({
             width: 3,
             height: 3,
         },
-    }
+    },
+
 });
 
