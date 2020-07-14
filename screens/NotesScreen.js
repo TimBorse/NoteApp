@@ -13,7 +13,7 @@ import {Header, Divider} from 'react-native-elements';
 
 export default class NotesScreen extends Component {
     items=[];
-    categorie;
+    category;
     focusListener;
 
     importData = async () => {
@@ -22,7 +22,8 @@ export default class NotesScreen extends Component {
             var keys = await AsyncStorage.getAllKeys();
             for (var i = 0; i < keys.length; i++) {
                 let key = keys[i];
-                if(key.startsWith("Note")){
+                //console.log(key);
+                if(key.startsWith("Note") && key.split('-')[2] == this.category){
                     let value = await AsyncStorage.getItem(keys[i]);
                     let title = key.split('-')[1];
                     this.items.push({
@@ -43,7 +44,7 @@ export default class NotesScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.categorie = props.route.params.categorie;
+        this.category = props.route.params.category;
         this.focusListener = props.navigation.addListener('focus', () => {
             this.importData();
             this.render();
@@ -56,7 +57,7 @@ export default class NotesScreen extends Component {
         //ToDo: Redirection to actual note onclick
         const redirect = () => this.props.navigation.navigate('Editor', {
             id: item.id,
-            categorie: this.categorie,
+            category: this.category,
         });
         return (
             <TouchableOpacity style={card} onPress={redirect}>
@@ -90,8 +91,9 @@ export default class NotesScreen extends Component {
         let {container, FloatingButtonStyle, TouchableOpacityStyle} = styles;
         let {items} = this.state;
         //ToDo: Add correct Navigation
+        console.log("NOTE CAT:"+this.category);
         const createNewNote = () => this.props.navigation.navigate('Editor', {
-            categorie: this.categorie,
+            category: this.category,
         });
         return (
             <View

@@ -84,7 +84,8 @@ const EditorScreen = (props) => {
     const [activeStyles, setActiveStyles] = useState([]);
     const [blockType, setActiveBlockType] = useState("unstyled");
     const [editorState, setEditorState] = useState("");
-    const category = props.route.params.categorie;
+    const category = props.route.params.category;
+    console.log("CAT:" + category);
     id = props.route.params.id;
     if(id != undefined){
         getData(id);
