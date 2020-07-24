@@ -9,12 +9,6 @@ export default class HomeScreen extends Component {
         return (
             <ImageBackground style={{width: '100%', height: '100%'}} source={require('../Start.png')} resizeMethod={'scale'}>
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection:'column'}}>
-                {/*<Text style={{fontWeight:'bold', fontSize:20}}>Welcome to Note App</Text>*/}
-                {/*<Button
-                    type="outline"
-                    title="Go to Notes"
-                    onPress={() => this.props.navigation.navigate('Notes')}
-                />*/}
                 <Button
                     icon={
                         <Icon

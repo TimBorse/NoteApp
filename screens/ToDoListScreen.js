@@ -37,7 +37,7 @@ export default class ToDoListScreen extends Component {
                     this.items.push({
                         toDo: jsStatus.toDo,
                         id: key,
-                        checked: jsStatus.checked,
+                        checked: jsStatus.status,
                     });
                 }
             }
@@ -92,8 +92,7 @@ export default class ToDoListScreen extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
-                    // backgroundImage={require('../header_ohneText.png')}
-                    leftComponent={{ icon: 'menu', color: '#6268b8', onPress: () =>  Alert.alert("Menu clicked!")}}
+                    leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
                     centerComponent={{ text: 'To Do List', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", } }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
@@ -161,9 +160,6 @@ export default class ToDoListScreen extends Component {
     }
     }
 }
-
-
-
 
 async function removeItemValue(key) {
     try {

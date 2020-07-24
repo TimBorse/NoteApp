@@ -77,9 +77,10 @@ export default class CategoryClass extends Component {
                                 {item.category}
                             </Text>
                            <Icon
-                                name='remove-circle'
-                                color='#7173a4'
-                                size={40}
+                               type='font-awesome'
+                               name='times'
+                                color={'#6268b8'}
+                                size={30}
                                 onPress={() => Alert.alert('Remove clicked')}>
                             </Icon>
                         </View>
@@ -93,12 +94,12 @@ export default class CategoryClass extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
-                    backgroundImage={require('../header_ohneText.png')}
-                    leftComponent={{ icon: 'menu', color: '#6268b8', onPress: () =>  Alert.alert("Menu clicked!")}}
+                    // backgroundImage={require('../header_ohneText.png')}
+                    leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
                     centerComponent={{ text: 'Categories', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic'} }}
-                    rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
+                    rightComponent={{ icon: 'home', size:30, color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
-                        backgroundColor: "transparent",
+                        backgroundColor: "#caebff",
                         justifyContent: "space-around"
                     }}
                 />
@@ -113,10 +114,13 @@ export default class CategoryClass extends Component {
                     activeOpacity={0.7}
                     onPress={this.openModal}
                     style={styles.TouchableOpacityStyle}>
-                    <Image
-                        source={require('../add_icon_b.png')}
-                        style={styles.FloatingButtonStyle}
-                    />
+                    <Icon
+                        reverse
+                        name={'add'}
+                        size={25}
+                        color={'#6268b8'}
+                    >
+                    </Icon>
                 </TouchableOpacity>
                 <Modal animationIn="slideInUp" animationOut="slideOutDown"
                        isVisible={this.state.isModalVisible}
@@ -212,9 +216,10 @@ const styles = StyleSheet.create({
     contentText: {
         fontSize: 25,
         flex: 1,
-        textAlign: 'left',
-        marginLeft: '5%',
-        color: "#000000",
+        textAlign: 'center',
+        marginLeft: '2%',
+        color: "#6268b8",
+        fontWeight: 'bold',
     },
     cardEinzeln: {
         flexDirection:'row',
@@ -225,6 +230,9 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: '#c1c3e7',
+        borderColor: '#6268b8',
+        borderWidth: 2,
+        borderRadius:10,
         marginBottom: 5,
         marginTop:5,
         marginLeft: '2%',
