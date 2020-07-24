@@ -7,7 +7,7 @@ import {
     Alert,
     Image, TextInput, FlatList,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import {Header, Icon} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -65,17 +65,23 @@ export default class CategoryClass extends Component {
 
     _renderItem = ({item, index}) => {
         console.log(item.category);
-        let {contentText,card, cardImage} = styles;
+        let {contentText,card,cardEinzeln} = styles;
         //ToDo: Redirection to actual note onclick
         const redirect = () => this.props.navigation.navigate('Notes', {
             category: item.category,
         });
         return (
                 <TouchableOpacity style={card} onPress={redirect}>
-                        <View style={card}>
+                        <View style={cardEinzeln}>
                             <Text style={contentText}>
                                 {item.category}
                             </Text>
+                           <Icon
+                                name='remove-circle'
+                                color='#7173a4'
+                                size={40}
+                                onPress={() => Alert.alert('Remove clicked')}>
+                            </Icon>
                         </View>
                 </TouchableOpacity>
         );
@@ -88,9 +94,9 @@ export default class CategoryClass extends Component {
             <View style={styles.MainContainer}>
                 <Header
                     backgroundImage={require('../header_ohneText.png')}
-                    leftComponent={{ color: '#fff', onPress: () => Alert.alert('Menu clicked') }}
-                    centerComponent={{ text: 'Categories', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontFamily:'Roboto'} }}
-                    rightComponent={{ icon: 'home', color: '#fff',onPress: () => Alert.alert('Home clicked') }}
+                    leftComponent={{ icon: 'menu', color: '#6268b8', onPress: () =>  Alert.alert("Menu clicked!")}}
+                    centerComponent={{ text: 'Categories', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic'} }}
+                    rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
                         backgroundColor: "transparent",
                         justifyContent: "space-around"
@@ -99,6 +105,7 @@ export default class CategoryClass extends Component {
                 <FlatList
                     style={styles.container}
                     data= {items}
+                    extraData={this.state}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={this._renderItem}
                 />
@@ -205,17 +212,21 @@ const styles = StyleSheet.create({
     contentText: {
         fontSize: 25,
         flex: 1,
-        textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: '10%',
-        marginLeft: '10%',
+        textAlign: 'left',
+        marginLeft: '5%',
         color: "#000000",
+    },
+    cardEinzeln: {
+        flexDirection:'row',
+        marginBottom: 10,
+        marginTop: 10,
+        marginLeft: '2%',
+        width: '96%',
     },
     card: {
         backgroundColor: '#c1c3e7',
         marginBottom: 5,
-        marginTop: 5,
+        marginTop:5,
         marginLeft: '2%',
         width: '96%',
         shadowColor: '#000',
