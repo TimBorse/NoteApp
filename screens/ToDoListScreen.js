@@ -45,6 +45,7 @@ export default class ToDoListScreen extends Component {
                     this.items.push({
                         toDo: toDo,
                         id: key,
+                        checked: false,
                     });
                 }
             }
@@ -58,8 +59,11 @@ export default class ToDoListScreen extends Component {
     _renderItem = ({item, index}) => {
         let {contentText,card,cardEinzeln} = styles;
 
-       const handleOnPress = () => {
-           this.setState({checked: !this.state.checked})
+       const handleOnPress = (item) => {
+           var res = this.items.find(obj => { return obj.id = item.id})
+           console.log(item.id)
+           res.checked = !item.checked
+           this.setState({items: this.items});
        }
         return (
             <View style={card}>
@@ -69,9 +73,9 @@ export default class ToDoListScreen extends Component {
                         uncheckedIcon='check-square-o'
                         uncheckedColor={'#fff'}
                         checkedColor={'#528d45'}
-                        checked={this.state.checked}
+                        checked={item.checked}
                         size={30}
-                        onPress={handleOnPress}
+                        onPress={() => handleOnPress(item)}
                     />
                     <Text style={contentText}>
                         {item.toDo}
