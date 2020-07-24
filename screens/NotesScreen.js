@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
-import {Header, Divider} from 'react-native-elements';
+import {Header, Divider, Icon} from 'react-native-elements';
 import HtmlText from 'react-native-html-to-text';
 import WebView from 'react-native-webview';
 
@@ -97,20 +97,17 @@ export default class NotesScreen extends Component {
             category: this.category,
         });
         return (
-            <View
-                style={{
-                    height: '100%'}}>
+            <View style={styles.MainContainer}>
                 <Header
-                    backgroundImage={require('../header_ohneText.png')}
-                    leftComponent={{ icon: 'menu', color: '#6268b8', onPress: () =>  Alert.alert("Menu clicked!")}}
-                    centerComponent={{ text: 'Notes', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic', fontFamily:' '} }}
+                    leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
+                    centerComponent={{ text: 'Notes', style: { color: '#6268b8', fontSize:30,fontWeight:"bold",} }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
-                        backgroundColor: "transparent",
+                        backgroundColor: "#caebff",
                         justifyContent: "space-around"
                     }}
                 />
-                <Divider style={{ backgroundColor: '#000000', height:2 }} />
+                <Divider style={{ backgroundColor: 'transparent', height:10}} />
                 <FlatList
                     style={container}
                     data={items}
@@ -121,15 +118,13 @@ export default class NotesScreen extends Component {
                     activeOpacity={0.7}
                     onPress={createNewNote}
                     style={TouchableOpacityStyle}>
-                    <Image
-                        //We are making FAB using TouchableOpacity with an image
-                        //We are using online image here
-                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
-
-                        //You can use you project image Example below
-                        source={require('../add_icon_b.png')}
-                        style={FloatingButtonStyle}
-                    />
+                    <Icon
+                        reverse
+                        name={'add'}
+                        size={25}
+                        color={'#6268b8'}
+                    >
+                    </Icon>
                 </TouchableOpacity>
             </View>
 
@@ -138,9 +133,14 @@ export default class NotesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    MainContainer: {
+        flex:1,
+        backgroundColor: 'transparent',
+    },
     container: {
+        flex:1,
         marginTop: 0,
-        backgroundColor: '#caebff',
+        backgroundColor: 'transparent',
         marginBottom: 80,
     },
     titleText: {
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         marginBottom: '10%',
     },
     card: {
-        backgroundColor: '#caebff',
+        backgroundColor: 'transparent',
         marginBottom: 10,
         marginLeft: '2%',
         width: '96%',
@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
     },
     TouchableOpacityStyle: {
         position: 'absolute',
-        marginBottom: 80,
         width: 50,
         height: 50,
         alignItems: 'center',

@@ -11,6 +11,7 @@ import {
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import RNDraftView, {getEditorState} from "react-native-draftjs-editor";
 import AsyncStorage from '@react-native-community/async-storage';
+import {Icon} from 'react-native-elements';
 
 const ControlButton = ({ text, action, isActive }) => {
     return (
@@ -135,29 +136,27 @@ const EditorScreen = (props) => {
                     activeOpacity={0.7}
                     onPress={() => navigateToImage(props)}
                     style={styles.ImageOpacityStyle}>
-                    <Image
-                        //We are making FAB using TouchableOpacity with an image
-                        //We are using online image here
-                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
-
-                        //You can use you project image Example below
-                        source={require('../gallery_icon.png')}
-                        style={styles.FloatingButtonStyle}
-                    />
+                    <Icon
+                        reverse
+                        name={'image'}
+                        type='font-awesome'
+                        size={25}
+                        color={'#6268b8'}
+                    >
+                    </Icon>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString())}
                     style={styles.TouchableOpacityStyle}>
-                    <Image
-                        //We are making FAB using TouchableOpacity with an image
-                        //We are using online image here
-                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
-
-                        //You can use you project image Example below
-                        source={require('../save_icon.png')}
-                        style={styles.FloatingButtonStyle}
-                    />
+                    <Icon
+                        reverse
+                        name={'download'}
+                        type='font-awesome'
+                        size={25}
+                        color={'#6268b8'}
+                    >
+                    </Icon>
                 </TouchableOpacity>
             </View>
             <EditorToolBar

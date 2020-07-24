@@ -11,15 +11,20 @@ import {Header, Icon} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 
+
+
 export default class CategoryClass extends Component {
     items = [];
     focusListener;
     constructor(props) {
         super(props);
         this.state = {
+            is2ndModal:false,
             isModalVisible:false,
+            is2ModalVisible:false,
             category: "",
             items: this.items,
+            itemId:"",
         };
         this.focusListener = props.navigation.addListener('focus', () => {
             this.importData();
@@ -28,19 +33,29 @@ export default class CategoryClass extends Component {
     }
 
     openModal = () =>{
-        this.setState({
-            isModalVisible:true
-        })
+        if (this.state.is2ndModal===false){
+            this.setState({
+                isModalVisible:true
+            })
+        }else{
+            this.setState({
+                is2ModalVisible:true
+            })
+        }
+
     }
 
     closeModal = () =>{
         this.setState({
-            isModalVisible:false
+            isModalVisible:false,
+            is2ModalVisible:false
         })
     }
+
     setText = (text)=> {
     this.setState({category: text})
 }
+
 
     importData = async () => {
         try {
@@ -66,7 +81,6 @@ export default class CategoryClass extends Component {
     _renderItem = ({item, index}) => {
         console.log(item.category);
         let {contentText,card,cardEinzeln} = styles;
-        //ToDo: Redirection to actual note onclick
         const redirect = () => this.props.navigation.navigate('Notes', {
             category: item.category,
         });
@@ -77,15 +91,20 @@ export default class CategoryClass extends Component {
                                 {item.category}
                             </Text>
                            <Icon
-                                name='remove-circle'
-                                color='#7173a4'
-                                size={40}
-                                onPress={() => Alert.alert('Remove clicked')}>
+                               type='font-awesome'
+                               name='times'
+                                color={'#6268b8'}
+                                size={30}
+                                onPress={() => this.setState({
+                                    is2ModalVisible:true,
+                                    itemId:item.id
+                                })}>
                             </Icon>
                         </View>
                 </TouchableOpacity>
         );
     };
+
 
     render() {
         console.log(this.state.items.length);
@@ -93,12 +112,11 @@ export default class CategoryClass extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
-                    backgroundImage={require('../header_ohneText.png')}
-                    leftComponent={{ icon: 'menu', color: '#6268b8', onPress: () =>  Alert.alert("Menu clicked!")}}
+                    leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
                     centerComponent={{ text: 'Categories', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic'} }}
-                    rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
+                    rightComponent={{ icon: 'home', size:30, color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
-                        backgroundColor: "transparent",
+                        backgroundColor: "#caebff",
                         justifyContent: "space-around"
                     }}
                 />
@@ -113,10 +131,13 @@ export default class CategoryClass extends Component {
                     activeOpacity={0.7}
                     onPress={this.openModal}
                     style={styles.TouchableOpacityStyle}>
-                    <Image
-                        source={require('../add_icon_b.png')}
-                        style={styles.FloatingButtonStyle}
-                    />
+                    <Icon
+                        reverse
+                        name={'add'}
+                        size={25}
+                        color={'#6268b8'}
+                    >
+                    </Icon>
                 </TouchableOpacity>
                 <Modal animationIn="slideInUp" animationOut="slideOutDown"
                        isVisible={this.state.isModalVisible}
@@ -143,13 +164,50 @@ export default class CategoryClass extends Component {
                         </View>
                     </View>
                 </Modal>
+                <View>
+                    <Modal animationIn="slideInUp" animationOut="slideOutDown"
+                           isVisible={this.state.is2ModalVisible===true}>
+                        <View style={styles.modalView}>
+                            <Text style={{color:'black',marginBottom:5}}>Are you sure you want to delete the category?</Text>
+                            <Text style={{color:'black',marginBottom:40}}>Every Note in this Category will be deleted...</Text>
+                            <View style={{ flex: 1,justifyContent:'center',position:'absolute',bottom:0, marginBottom:10, marginTop:10}}>
+                                <View style={{flexDirection:'row',}}>
+                                    <TouchableOpacity
+                                        style={{backgroundColor:'#81f681',width:'50%'}}
+                                        onPress={() => {
+                                            removeItemValue(this.state.itemId);
+                                            this.setState({
+                                                is2ModalVisible:false
+                                            })}}>
+                                        <Text style={{color:'black',textAlign:'center',padding:10}}>Yes</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={{backgroundColor:'#f89494',width:'50%', type:"outline"}}
+                                        onPress={()=>this.setState({
+                                            is2ModalVisible:false
+                                        })}>
+                                        <Text style={{color:'black',textAlign:'center',padding:10}}>Cancel</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
             </View>
 
         );
     }
 }
 
-
+async function removeItemValue(key) {
+    try {
+        await AsyncStorage.removeItem(key);
+        return true;
+    }
+    catch(exception) {
+        return false;
+    }
+}
 
 async function saveData(props, category, data){
     try{
@@ -165,6 +223,7 @@ async function saveData(props, category, data){
         category: category,
     });
 }
+
 
 
 const styles = StyleSheet.create({
@@ -212,9 +271,10 @@ const styles = StyleSheet.create({
     contentText: {
         fontSize: 25,
         flex: 1,
-        textAlign: 'left',
-        marginLeft: '5%',
-        color: "#000000",
+        textAlign: 'center',
+        marginLeft: '2%',
+        color: "#6268b8",
+        fontWeight: 'bold',
     },
     cardEinzeln: {
         flexDirection:'row',
@@ -225,6 +285,9 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: '#c1c3e7',
+        borderColor: '#6268b8',
+        borderWidth: 2,
+        borderRadius:10,
         marginBottom: 5,
         marginTop:5,
         marginLeft: '2%',
