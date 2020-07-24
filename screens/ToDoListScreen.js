@@ -37,7 +37,7 @@ export default class ToDoListScreen extends Component {
                     this.items.push({
                         toDo: jsStatus.toDo,
                         id: key,
-                        checked: jsStatus.checked,
+                        checked: jsStatus.status,
                     });
                 }
             }
@@ -56,7 +56,6 @@ export default class ToDoListScreen extends Component {
 
     _renderItem = ({item, index}) => {
         let {contentText,card,cardEinzeln} = styles;
-        console.log(item.toDo)
 
         return (
             <View style={card}>
