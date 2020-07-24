@@ -56,7 +56,6 @@ export default class ToDoListScreen extends Component {
 
     _renderItem = ({item, index}) => {
         let {contentText,card,cardEinzeln} = styles;
-        console.log(item.toDo)
 
         return (
             <View style={card}>
