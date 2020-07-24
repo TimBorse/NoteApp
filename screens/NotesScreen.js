@@ -77,11 +77,12 @@ export default class NotesScreen extends Component {
                         }}>
                         <Text style={titleText}>{item.title}</Text>
                         <WebView  style={{
-                            backgroundColor: '#f6ea8c',
+                            backgroundColor: 'transparent',
                         }}
                                   showsHorizontalScrollIndicator={false}
                                   showsVerticalScrollIndicator ={false}
                                   source={{html: item.content}} />
+                          <Icon name={'delete'} size={30} color={'#6a0303'} style={{marginBottom:10}} onPress={()=>removeItemValue(item.id)}/>
                     </View>
                 </ImageBackground>
             </TouchableOpacity>
@@ -131,7 +132,15 @@ export default class NotesScreen extends Component {
         );
     }
 }
-
+async function removeItemValue(key) {
+    try {
+        await AsyncStorage.removeItem(key);
+        return true;
+    }
+    catch(exception) {
+        return false;
+    }
+}
 const styles = StyleSheet.create({
     MainContainer: {
         flex:1,
