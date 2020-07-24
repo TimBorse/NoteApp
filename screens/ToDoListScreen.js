@@ -8,17 +8,15 @@ export default class ToDoListScreen extends Component {
     focusListener;
     constructor(props) {
         super(props);
-
-        this.state = {
-            toDo: "",
-            items: this.items,
-            checked: false,
-        };
-
         this.focusListener = props.navigation.addListener('focus', () => {
             this.importData();
             this.render();
         })
+        this.state = {
+            toDo: "",
+            items: this.items,
+        };
+
 
     }
 
@@ -36,7 +34,6 @@ export default class ToDoListScreen extends Component {
                 if(key.startsWith("toDo-")){
                     let jsonObj = await AsyncStorage.getItem(keys[i]);
                     let jsStatus = JSON.parse(jsonObj)
-                    console.log(jsonObj)
                     this.items.push({
                         toDo: jsStatus.toDo,
                         id: key,
@@ -53,12 +50,13 @@ export default class ToDoListScreen extends Component {
     handleOnPress = (iditem) => {
         var res = this.items.find(obj => { return obj.id === iditem.id})
         res.checked = !iditem.checked
-        this.saveData(this.props, iditem.toDo);
+        this.overrideData(iditem);
         this.setState({items: this.items});
     }
 
     _renderItem = ({item, index}) => {
         let {contentText,card,cardEinzeln} = styles;
+        console.log(item.toDo)
 
         return (
             <View style={card}>
@@ -90,7 +88,6 @@ export default class ToDoListScreen extends Component {
     };
 
     render() {
-        console.log(this.state.items.length);
         let {items} = this.state;
         return (
             <View style={styles.MainContainer}>
@@ -112,7 +109,7 @@ export default class ToDoListScreen extends Component {
                     />
                     <TouchableOpacity
                         style={{backgroundColor:'#c1c3e7',height:40,width:60, marginBottom:10, marginTop:10,}}
-                        onPress={() => {this.saveData(this.props, this.state.toDo, this.state.toDo);}}>
+                        onPress={() => {this.saveData(this.props, this.state.toDo);}}>
                         <Text style={{color:'black',textAlign:'center',padding:10,fontWeight:"bold"}}>Add</Text>
                     </TouchableOpacity>
                 </View>
@@ -128,22 +125,40 @@ export default class ToDoListScreen extends Component {
         );
     }
     async saveData(props, toDO){
+        console.log("todofaafaa:"+toDO)
+
         try{
-            if (toDO !== "") {
+            if (toDO != "") {
                 let datas=({
-                    "toDo": toDO,
-                    "status": this.state.checked
+                    toDo: toDO,
+                    status: false
                 });
 
                 var toDo_name = "toDo-" + toDO;
 
-                console.log(toDO)
-                return await AsyncStorage.setItem(toDo_name,JSON.stringify(datas));
+                await AsyncStorage.setItem(toDo_name,JSON.stringify(datas));
             }
         }catch (err){
             console.log(err);
         }
 
+    }
+
+    async overrideData(item){
+        try{
+            if(item.toDo != ""){
+                let datas=({
+                    toDo: item.toDo,
+                    status: item.checked
+                });
+                var toDo_name = "toDo-" + item.toDo;
+                console.log(JSON.stringify(datas))
+                await AsyncStorage.setItem(toDo_name,JSON.stringify(datas));
+            }
+
+        }catch (err){
+        console.log(err);
+    }
     }
 }
 
