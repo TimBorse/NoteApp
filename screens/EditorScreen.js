@@ -187,6 +187,18 @@ async function saveData(props, title, category, data){
         if(resTitle == undefined){
             resTitle = initTitle;
         }
+        if(resTitle != initTitle){
+            var keys = await AsyncStorage.getAllKeys();
+            for(var i=0; i<keys.length; i++){
+                let key = keys[i];
+                let value;
+                if(key == "Image-"+initTitle+"-"+category){
+                    value = await AsyncStorage.getItem(key);
+                    await AsyncStorage.setItem("Image-"+resTitle+"-"+category, value);
+                    await AsyncStorage.removeItem(key);
+                }
+            }
+        }
         var str = "Note-";
         str += resTitle;
         str += "-";
