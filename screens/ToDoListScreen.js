@@ -55,16 +55,15 @@ export default class ToDoListScreen extends Component {
         this.setState({items: this.items});
     }
 
+    handleOnPress = (iditem) => {
+        var res = this.items.find(obj => { return obj.id === iditem.id}) //OMG SIND WIR DUMM :C
+        res.checked = !iditem.checked
+        this.setState({items: this.items});
+    }
 
     _renderItem = ({item, index}) => {
         let {contentText,card,cardEinzeln} = styles;
 
-       const handleOnPress = (item) => {
-           var res = this.items.find(obj => { return obj.id = item.id})
-           console.log(item.id)
-           res.checked = !item.checked
-           this.setState({items: this.items});
-       }
         return (
             <View style={card}>
                 <View style={cardEinzeln}>
@@ -75,7 +74,7 @@ export default class ToDoListScreen extends Component {
                         checkedColor={'#528d45'}
                         checked={item.checked}
                         size={30}
-                        onPress={() => handleOnPress(item)}
+                        onPress={() => this.handleOnPress(item)}
                     />
                     <Text style={contentText}>
                         {item.toDo}
