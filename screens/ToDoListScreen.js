@@ -1,13 +1,6 @@
 import React, {Component} from 'react';
-import {
-    TouchableOpacity,
-    StyleSheet,
-    Text,
-    View,
-    Alert,
-    TextInput, FlatList,
-} from 'react-native';
-import {Header, Icon, CheckBox} from 'react-native-elements';
+import {Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {CheckBox, Header, Icon} from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class ToDoListScreen extends Component {
@@ -19,7 +12,7 @@ export default class ToDoListScreen extends Component {
         this.state = {
             toDo: "",
             items: this.items,
-            checked: this.props.checked,
+            checked: false,
         };
 
         this.focusListener = props.navigation.addListener('focus', () => {
@@ -41,11 +34,13 @@ export default class ToDoListScreen extends Component {
             for (var i = 0; i < keys.length; i++) {
                 let key = keys[i];
                 if(key.startsWith("toDo-")){
-                    let toDo = await AsyncStorage.getItem(keys[i]);
+                    let jsonObj = await AsyncStorage.getItem(keys[i]);
+                    let jsStatus = JSON.parse(jsonObj)
+                    console.log(jsonObj)
                     this.items.push({
-                        toDo: toDo,
+                        toDo: jsStatus.toDo,
                         id: key,
-                        checked: false,
+                        checked: jsStatus.checked,
                     });
                 }
             }
@@ -56,8 +51,9 @@ export default class ToDoListScreen extends Component {
     }
 
     handleOnPress = (iditem) => {
-        var res = this.items.find(obj => { return obj.id === iditem.id}) //OMG SIND WIR DUMM :C
+        var res = this.items.find(obj => { return obj.id === iditem.id})
         res.checked = !iditem.checked
+        this.saveData(this.props, iditem.toDo);
         this.setState({items: this.items});
     }
 
@@ -96,7 +92,6 @@ export default class ToDoListScreen extends Component {
     render() {
         console.log(this.state.items.length);
         let {items} = this.state;
-
         return (
             <View style={styles.MainContainer}>
                 <Header
@@ -117,7 +112,7 @@ export default class ToDoListScreen extends Component {
                     />
                     <TouchableOpacity
                         style={{backgroundColor:'#c1c3e7',height:40,width:60, marginBottom:10, marginTop:10,}}
-                        onPress={() => {saveData(this.props, this.state.toDo, this.state.toDo);}}>
+                        onPress={() => {this.saveData(this.props, this.state.toDo, this.state.toDo);}}>
                         <Text style={{color:'black',textAlign:'center',padding:10,fontWeight:"bold"}}>Add</Text>
                     </TouchableOpacity>
                 </View>
@@ -132,21 +127,28 @@ export default class ToDoListScreen extends Component {
 
         );
     }
-}
+    async saveData(props, toDO){
+        try{
+            if (toDO !== "") {
+                let datas=({
+                    "toDo": toDO,
+                    "status": this.state.checked
+                });
 
+                var toDo_name = "toDo-" + toDO;
 
-
-async function saveData(props, toDO, data){
-    try{
-        if (data !== "") {
-            var toDo_name = "toDo-" + toDO;
-            await AsyncStorage.setItem(toDo_name, data.toString());
-            console.log(toDo_name)
+                console.log(toDO)
+                return await AsyncStorage.setItem(toDo_name,JSON.stringify(datas));
+            }
+        }catch (err){
+            console.log(err);
         }
-    }catch (err){
-        console.log(err);
+
     }
 }
+
+
+
 
 async function removeItemValue(key) {
     try {
