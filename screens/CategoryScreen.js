@@ -112,8 +112,9 @@ export default class CategoryClass extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
+                    backgroundImage={require('../category.png')}
                     leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
-                    centerComponent={{ text: 'Categories', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic'} }}
+                    centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic'} }}
                     rightComponent={{ icon: 'home', size:30, color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
                         backgroundColor: "#caebff",
@@ -132,9 +133,10 @@ export default class CategoryClass extends Component {
                     onPress={this.openModal}
                     style={styles.TouchableOpacityStyle}>
                     <Icon
+                        raised
                         reverse
                         name={'add'}
-                        size={25}
+                        size={35}
                         color={'#6268b8'}
                     >
                     </Icon>
@@ -164,6 +166,7 @@ export default class CategoryClass extends Component {
                         </View>
                     </View>
                 </Modal>
+
                 <View>
                     <Modal animationIn="slideInUp" animationOut="slideOutDown"
                            isVisible={this.state.is2ModalVisible===true}>

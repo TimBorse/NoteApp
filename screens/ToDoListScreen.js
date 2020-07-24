@@ -126,7 +126,7 @@ export default class ToDoListScreen extends Component {
         console.log("todofaafaa:"+toDO)
 
         try{
-            if (toDO != "") {
+            if (toDO !== "") {
                 let datas=({
                     toDo: toDO,
                     status: false
@@ -144,7 +144,7 @@ export default class ToDoListScreen extends Component {
 
     async overrideData(item){
         try{
-            if(item.toDo != ""){
+            if(item.toDo !== ""){
                 let datas=({
                     toDo: item.toDo,
                     status: item.checked

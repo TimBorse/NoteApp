@@ -3,7 +3,7 @@ import ImagePicker from 'react-native-image-picker';
 import React, {Component, useState} from 'react';
 import {StyleSheet, Image, TouchableOpacity, View, Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Header} from 'react-native-elements';
+import {Header, Icon} from 'react-native-elements';
 
 
 export default class ImageScreen extends Component{
@@ -110,9 +110,9 @@ export default class ImageScreen extends Component{
                 marginTop: 0
             }}>
                 <Header
-                    backgroundImage={require('../header_ohneText.png')}
-                    leftComponent={{ icon: 'menu', color: '#6268b8', onPress: () =>  Alert.alert("Menu clicked!")}}
-                    centerComponent={{ text: 'Notes', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic', fontFamily:' '} }}
+                    backgroundImage={require('../images.png')}
+                    leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
+                    centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic',} }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
                         backgroundColor: "transparent",
@@ -125,34 +125,36 @@ export default class ImageScreen extends Component{
                     images={this.state.avatarSource}
                     onPageSelected={this.changeIndex}
                 />
+                <View style={{flexDirection:'row',justifyContent: 'space-around',marginBottom:10}}>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => this.openImagePicker()}
                     style={styles.ImageOpacityStyle}>
-                    <Image
-                        //We are making FAB using TouchableOpacity with an image
-                        //We are using online image here
-                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
-
-                        //You can use you project image Example below
-                        source={require('../gallery_icon.png')}
-                        style={styles.FloatingButtonStyle}
-                    />
+                    <Icon
+                        reverse
+                        raised
+                        type='font-awesome'
+                        name={'image'}
+                        size={35}
+                        color={'#6268b8'}
+                    >
+                    </Icon>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => this.removeImage()}
                     style={styles.ImageOpacityStyle}>
-                    <Image
-                        //We are making FAB using TouchableOpacity with an image
-                        //We are using online image here
-                        // source={{uri:'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png', }}
-
-                        //You can use you project image Example below
-                        source={require('../save_icon.png')}
-                        style={styles.FloatingButtonStyle}
-                    />
+                    <Icon
+                        raised
+                        reverse
+                        type='font-awesome'
+                        name={'trash-o'}
+                        size={35}
+                        color={'#6268b8'}
+                    >
+                    </Icon>
                 </TouchableOpacity>
+                </View>
             </View>
 
 

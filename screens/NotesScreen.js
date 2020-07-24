@@ -5,7 +5,7 @@ import {
     Text,
     View,
     ImageBackground,
-    FlatList, Image, Alert,
+    FlatList,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -100,8 +100,9 @@ export default class NotesScreen extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
+                    backgroundImage={require('../notes.png')}
                     leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
-                    centerComponent={{ text: 'Notes', style: { color: '#6268b8', fontSize:30,fontWeight:"bold",} }}
+                    centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold",} }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
                         backgroundColor: "#caebff",
