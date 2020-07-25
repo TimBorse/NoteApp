@@ -25,11 +25,17 @@ export default class CategoryClass extends Component {
             category: "",
             items: this.items,
             itemId:"",
+            refresh: false,
         };
         this.focusListener = props.navigation.addListener('focus', () => {
-            this.importData();
-            this.render();
+            this.refreshFlatlist();
         })
+    }
+
+    refreshFlatlist(){
+        this.setState({refresh: !this.state.refresh});
+        this.importData();
+        this.render();
     }
 
     openModal = () =>{
@@ -124,7 +130,7 @@ export default class CategoryClass extends Component {
                 <FlatList
                     style={styles.container}
                     data= {items}
-                    extraData={this.state}
+                    extraData={this.state.refresh}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={this._renderItem}
                 />
@@ -154,7 +160,7 @@ export default class CategoryClass extends Component {
                             <View style={{flexDirection:'row',}}>
                                 <TouchableOpacity
                                     style={{backgroundColor:'#81f681',width:'50%'}}
-                                    onPress={() => {saveData(this.props, this.state.category, this.state.category); this.closeModal();}}>
+                                    onPress={() => {this.saveData(this.props, this.state.category, this.state.category); this.closeModal();}}>
                                     <Text style={{color:'black',textAlign:'center',padding:10}}>Save</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
@@ -178,7 +184,7 @@ export default class CategoryClass extends Component {
                                     <TouchableOpacity
                                         style={{backgroundColor:'#81f681',width:'50%'}}
                                         onPress={() => {
-                                            removeItemValue(this.state.itemId);
+                                            this.removeItemValue(this.state.itemId);
                                             this.setState({
                                                 is2ModalVisible:false
                                             })}}>
@@ -200,34 +206,28 @@ export default class CategoryClass extends Component {
 
         );
     }
-}
-
-async function removeItemValue(key) {
-    try {
-        await AsyncStorage.removeItem(key);
-        return true;
-    }
-    catch(exception) {
-        return false;
-    }
-}
-
-async function saveData(props, category, data){
-    try{
-        var category_name = "category-"+category;
-        await AsyncStorage.setItem(category_name, data.toString());
-        console.log(category_name)
-
-    }catch (err){
-        console.log(err);
+    async removeItemValue(key) {
+        try {
+            await AsyncStorage.removeItem(key);
+            this.refreshFlatlist();
+            return true;
+        }
+        catch(exception) {
+            return false;
+        }
     }
 
-    props.navigation.navigate('Notes', {
-        category: category,
-    });
+    async saveData(props, category, data){
+        try{
+            var category_name = "category-"+category;
+            await AsyncStorage.setItem(category_name, data.toString());
+            this.refreshFlatlist();
+
+        }catch (err){
+            console.log(err);
+        }
+    }
 }
-
-
 
 const styles = StyleSheet.create({
     MainContainer: {
