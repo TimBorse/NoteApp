@@ -153,7 +153,7 @@ const EditorScreen = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString(), true)}
+                    onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString(), true, "")}
                     style={styles.TouchableOpacityStyle}>
                     <Icon
                         reverse
@@ -177,17 +177,16 @@ const EditorScreen = (props) => {
 };
 
 function navigateToImage(props, title, category, data){
-    saveData(props, title, category, data, false);
-    var currentId = "Note-"+title+"-"+category;
-    props.navigation.navigate('Image', {
-        id: currentId
-    });
+    var currentId = "Note-"+title.title+"-"+category;
+    saveData(props, title, category, data, false, currentId);
 }
 
 
-async function saveData(props, title, category, data, navigateBack){
+async function saveData(props, title, category, data, navigateBack, imageId){
     try{
+        console.log("InitTitle:"+initTitle);
         var resTitle = title.title;
+        console.log("ResTitle:"+resTitle);
         if(id!=undefined){
             await AsyncStorage.removeItem(id);
         }
@@ -195,18 +194,18 @@ async function saveData(props, title, category, data, navigateBack){
             resTitle = initTitle;
         }
         if(resTitle != initTitle){
-            console.log("test");
-            var keys = await AsyncStorage.getAllKeys();
-            for(var i=0; i<keys.length; i++){
-                let key = keys[i];
-                let value;
-                if(key == "Image-"+initTitle+"-"+category){
-                    value = await AsyncStorage.getItem(key);
-                    await AsyncStorage.setItem("Image-"+resTitle+"-"+category, value);
-                    await AsyncStorage.removeItem(key);
+                var keys = await AsyncStorage.getAllKeys();
+                for(var i=0; i<keys.length; i++){
+                    let key = keys[i];
+                    let value;
+                    if(key == "Image-"+initTitle+"-"+category){
+                        value = await AsyncStorage.getItem(key);
+                        await AsyncStorage.setItem("Image-"+resTitle+"-"+category, value);
+                        await AsyncStorage.removeItem(key);
+                    }
                 }
-            }
         }
+
         var str = "Note-";
         str += resTitle;
         str += "-";
@@ -215,6 +214,10 @@ async function saveData(props, title, category, data, navigateBack){
         if(navigateBack){
             props.navigation.navigate('Notes', {
                 category: category
+            });
+        }else{
+            props.navigation.navigate('Image', {
+                id: imageId
             });
         }
     }catch (err){

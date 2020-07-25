@@ -7,15 +7,16 @@ import {Header, Icon} from 'react-native-elements';
 
 
 export default class ImageScreen extends Component{
+    noteId;
     id;
     index;
     constructor(props) {
         super();
         this.state= {index: 0, avatarSource: []};
-        var noteId = props.route.params.id;
+        this.noteId = props.route.params.id;
         this.id = "Image-";
-        this.id += noteId.split('-')[1] + "-";
-        this.id += noteId.split('-')[2];
+        this.id += this.noteId.split('-')[1] + "-";
+        this.id += this.noteId.split('-')[2];
         this.importData();
         console.log(this.onChangeImage);
     }
@@ -111,7 +112,7 @@ export default class ImageScreen extends Component{
             }}>
                 <Header
                     backgroundImage={require('../images.png')}
-                    leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
+                    leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.navigate('Editor',{id: this.noteId}) }}
                     centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic',} }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
