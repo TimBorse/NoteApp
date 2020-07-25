@@ -27,6 +27,31 @@ const ControlButton = ({ text, action, isActive }) => {
     );
 };
 
+const IconButton = ({ name, type, action, isActive }) => {
+    if(isActive){
+        return (<Icon
+                raised
+                name={name}
+                type={type}
+                onPress={action}
+                size={25}
+                color={'#6268b8'}
+            />)
+
+    }
+    return (
+        <Icon
+
+            name={name}
+            type={type}
+            onPress={action}
+            size={25}
+            color={'#6268b8'}
+
+        />
+    );
+};
+
 const EditorToolBar = ({
                            activeStyles,
                            blockType,
@@ -35,33 +60,39 @@ const EditorToolBar = ({
                        }) => {
     return (
         <View style={styles.toolbarContainer}>
-            <ControlButton
-                text={"B"}
+            <IconButton
+                name={'bold'}
+                type={'font-awesome'}
                 isActive={activeStyles.includes("BOLD")}
                 action={() => toggleStyle("BOLD")}
             />
-            <ControlButton
-                text={"I"}
+            <IconButton
+                name={'italic'}
+                type={'font-awesome'}
                 isActive={activeStyles.includes("ITALIC")}
                 action={() => toggleStyle("ITALIC")}
             />
-            <ControlButton
-                text={"H"}
+            <IconButton
+                name={'H1'}
+                type={'font-awesome'}
                 isActive={blockType === "header-one"}
                 action={() => toggleBlockType("header-one")}
             />
-            <ControlButton
-                text={"ul"}
+            <IconButton
+                name={'list'}
+                type={'font-awesome'}
                 isActive={blockType === "unordered-list-item"}
                 action={() => toggleBlockType("unordered-list-item")}
             />
-            <ControlButton
-                text={"ol"}
+            <IconButton
+                name={'list-ol'}
+                type={'font-awesome'}
                 isActive={blockType === "ordered-list-item"}
                 action={() => toggleBlockType("ordered-list-item")}
             />
-            <ControlButton
-                text={"--"}
+            <IconButton
+                name={'strikethrough'}
+                type={'font-awesome'}
                 isActive={activeStyles.includes("STRIKETHROUGH")}
                 action={() => toggleStyle("STRIKETHROUGH")}
             />
