@@ -121,7 +121,7 @@ const EditorScreen = (props) => {
     return (
         <SafeAreaView style={styles.containerStyle}>
             <Header
-                backgroundImage={require('../editor.png')}
+                backgroundImage={require('../resources/editor.png')}
                 leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  props.navigation.goBack() }}
                 centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic'} }}
                 rightComponent={{ icon: 'home', size:30, color: '#6268b8',onPress: () => props.navigation.navigate('Home') }}

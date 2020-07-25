@@ -67,7 +67,7 @@ export default class NotesScreen extends Component {
         return (
             <TouchableOpacity style={card} onPress={redirect}>
                 <ImageBackground
-                    source={require('../note.png')}
+                    source={require('../resources/note.png')}
                     style={cardImage}>
                     <View
                         style={{
@@ -105,7 +105,7 @@ export default class NotesScreen extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
-                    backgroundImage={require('../notes.png')}
+                    backgroundImage={require('../resources/notes.png')}
                     leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
                     centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold",} }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}

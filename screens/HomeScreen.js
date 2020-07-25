@@ -6,7 +6,7 @@ import {Button, Icon} from 'react-native-elements';
 export default class HomeScreen extends Component {
     render() {
         return (
-            <ImageBackground style={{width: '100%', height: '100%'}} source={require('../Start.png')} resizeMethod={'scale'}>
+            <ImageBackground style={{width: '100%', height: '100%'}} source={require('../resources/Start.png')} resizeMethod={'scale'}>
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection:'column'}}>
                 <Button
                     icon={

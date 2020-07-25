@@ -7,7 +7,6 @@ import NotesScreen from './screens/NotesScreen';
 import HomeScreen from './screens/HomeScreen';
 import CategoryScreen from './screens/CategoryScreen';
 import EditorScreen from './screens/EditorScreen';
-import TestScreen from './screens/TestScreen';
 import ImageScreen from './screens/ImageScreen';
 import ToDoListScreen from './screens/ToDoListScreen';
 
@@ -30,7 +29,6 @@ function NavStack() {
             <Stack.Screen name="Notes" component={NotesScreen} options={{title: 'Notes'}} />
             <Stack.Screen name="Categories" component={CategoryScreen} options={{title: 'Categories'}} />
             <Stack.Screen name="Editor" component={EditorScreen} options={{title: 'Editor'}} />
-            <Stack.Screen name="Test" component={TestScreen} options={{title: 'Test'}} />
             <Stack.Screen name="Image" component={ImageScreen} options={{title: 'Image'}}/>
             <Stack.Screen name="ToDo" component={ToDoListScreen} options={{title: 'ToDo'}}/>
         </Stack.Navigator>

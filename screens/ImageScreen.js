@@ -112,7 +112,7 @@ export default class ImageScreen extends Component{
                 marginTop: 0
             }}>
                 <Header
-                    backgroundImage={require('../images.png')}
+                    backgroundImage={require('../resources/images.png')}
                     leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.navigate('Editor',{id: this.noteId}) }}
                     centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic',} }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
