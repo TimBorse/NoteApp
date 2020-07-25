@@ -1,8 +1,7 @@
 // Homescreen.js
 import React, {Component} from 'react';
-import {View, Text, ImageBackground} from 'react-native';
+import {View, ImageBackground} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
-import {createStackNavigator, createAppContainer} from 'react-navigation';
 
 export default class HomeScreen extends Component {
     render() {
@@ -42,7 +41,7 @@ export default class HomeScreen extends Component {
                     buttonStyle={{backgroundColor: '#c1c3e7',
                         borderColor: '#6268b8', borderWidth:1}}
                     type="solid"
-                    title="To-Do-List"
+                    title="To Do List"
                     onPress={() => this.props.navigation.navigate('ToDo')}
                 />
             </View>

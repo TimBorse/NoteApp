@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {CheckBox, Header, Icon} from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -97,8 +97,9 @@ export default class ToDoListScreen extends Component {
         return (
             <View style={styles.MainContainer}>
                 <Header
+                    backgroundImage={require('../todolist.png')}
                     leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  this.props.navigation.goBack() }}
-                    centerComponent={{ text: 'To Do List', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", } }}
+                    centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", } }}
                     rightComponent={{ icon: 'home', color: '#6268b8',onPress: () => this.props.navigation.navigate('Home') }}
                     containerStyle={{
                         backgroundColor: "#caebff",
