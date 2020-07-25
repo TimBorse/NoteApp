@@ -19,11 +19,11 @@ export default class HomeScreen extends Component {
                         />
                     }
                     iconLeft
-                    containerStyle={{ width: 120,}}
+                    containerStyle={{ width: 130,marginBottom:10}}
                     buttonStyle={{backgroundColor: '#c1c3e7',
                         borderColor: '#6268b8', borderWidth:1}}
                     type="solid"
-                    title="Write Note"
+                    title="Write a Note"
                     onPress={() => this.props.navigation.navigate('Categories')}
                 />
                 <Button
@@ -33,11 +33,11 @@ export default class HomeScreen extends Component {
                             type={'material'}
                             size={20}
                             color="white"
-                            containerStyle={{marginRight:5}}
+                            containerStyle={{marginRight:10}}
                         />
                     }
                     iconLeft
-                    containerStyle={{ width: 120,marginTop:10}}
+                    containerStyle={{ width: 130,marginTop:10}}
                     buttonStyle={{backgroundColor: '#c1c3e7',
                         borderColor: '#6268b8', borderWidth:1}}
                     type="solid"
