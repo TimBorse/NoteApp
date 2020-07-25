@@ -9,12 +9,12 @@ export default class ToDoListScreen extends Component {
     constructor(props) {
         super(props);
         this.focusListener = props.navigation.addListener('focus', () => {
-            this.importData();
-            this.render();
+            this.reloadFlatlist();
         })
         this.state = {
             toDo: "",
             items: this.items,
+            refresh: false,
         };
 
 
@@ -22,6 +22,12 @@ export default class ToDoListScreen extends Component {
 
     setText = (text)=> {
         this.setState({toDo: text})
+    }
+
+    reloadFlatlist(){
+        this.setState({refresh: !this.state.refresh})
+        this.importData();
+        this.render();
     }
 
 
@@ -78,7 +84,7 @@ export default class ToDoListScreen extends Component {
                         color={'#6268b8'}
                         size={30}
                         containerStyle={{marginRight:10}}
-                        onPress={() => {removeItemValue(item.id);}}
+                        onPress={() => {this.removeItemValue(item.id);}}
                     >
                     </Icon>
                 </View>
@@ -114,7 +120,7 @@ export default class ToDoListScreen extends Component {
                 <FlatList
                     style={styles.container}
                     data= {items}
-                    extraData={this.state}
+                    extraData={this.state.refresh}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={this._renderItem}
                 />
@@ -135,6 +141,7 @@ export default class ToDoListScreen extends Component {
                 var toDo_name = "toDo-" + toDO;
 
                 await AsyncStorage.setItem(toDo_name,JSON.stringify(datas));
+                this.reloadFlatlist();
             }
         }catch (err){
             console.log(err);
@@ -158,17 +165,19 @@ export default class ToDoListScreen extends Component {
         console.log(err);
     }
     }
+    async removeItemValue(key) {
+        try {
+            await AsyncStorage.removeItem(key);
+            this.reloadFlatlist();
+            return true;
+        }
+        catch(exception) {
+            return false;
+        }
+    }
 }
 
-async function removeItemValue(key) {
-    try {
-        await AsyncStorage.removeItem(key);
-        return true;
-    }
-    catch(exception) {
-        return false;
-    }
-}
+
 
 
 const styles = StyleSheet.create({

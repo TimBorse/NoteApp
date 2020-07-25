@@ -46,10 +46,15 @@ export default class NotesScreen extends Component {
         super(props);
         this.category = props.route.params.category;
         this.focusListener = props.navigation.addListener('focus', () => {
-            this.importData();
-            this.render();
+            this.refreshFlatList();
         })
-        this.state = {items: this.items};
+        this.state = {refresh: false, items: this.items};
+    }
+
+    refreshFlatList(){
+        this.setState({refresh: !this.state.refresh});
+        this.importData();
+        this.render();
     }
 
     _renderItem = ({item, index}) => {
@@ -82,7 +87,7 @@ export default class NotesScreen extends Component {
                                   showsHorizontalScrollIndicator={false}
                                   showsVerticalScrollIndicator ={false}
                                   source={{html: item.content}} />
-                          <Icon name={'delete'} size={30} color={'#6a0303'} style={{marginBottom:10}} onPress={()=>removeItemValue(item.id)}/>
+                          <Icon name={'delete'} size={30} color={'#6a0303'} style={{marginBottom:10}} onPress={()=>this.removeItemValue(item.id)}/>
                     </View>
                 </ImageBackground>
             </TouchableOpacity>
@@ -112,6 +117,7 @@ export default class NotesScreen extends Component {
                 <Divider style={{ backgroundColor: 'transparent', height:10}} />
                 <FlatList
                     style={container}
+                    extraData={this.state.refresh}
                     data={items}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={this._renderItem}
@@ -132,14 +138,16 @@ export default class NotesScreen extends Component {
 
         );
     }
-}
-async function removeItemValue(key) {
-    try {
-        await AsyncStorage.removeItem(key);
-        return true;
-    }
-    catch(exception) {
-        return false;
+    async removeItemValue(key) {
+        try {
+            await AsyncStorage.removeItem(key);
+            this.refreshFlatList();
+            return true;
+        }
+        catch(exception) {
+            console.log("error");
+            return false;
+        }
     }
 }
 const styles = StyleSheet.create({
