@@ -79,6 +79,7 @@ var defaultValue = "";
 var id;
 var initTitle = "";
 var category;
+var currentTitle = "";
 
 const EditorScreen = (props) => {
     const _draftRef = React.createRef();
@@ -92,6 +93,11 @@ const EditorScreen = (props) => {
         initTitle=id.split('-')[1];
     }
     const[title, setTitle] = useState(initTitle);
+
+    const setCurrentTitle = (selectedTitle) => {
+        setTitle(selectedTitle)
+        currentTitle = title;
+    }
 
 
     const editorLoaded = () => {
@@ -118,7 +124,7 @@ const EditorScreen = (props) => {
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 placeholder={"Title"}
-                onChangeText={(title) => setTitle({title})}
+                onChangeText={(title) => setCurrentTitle({title})}
                 defaultValue={title}
             />
             <RNDraftView
@@ -134,7 +140,7 @@ const EditorScreen = (props) => {
             <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => navigateToImage(props)}
+                    onPress={() => navigateToImage(props, title, category, _draftRef.current.getEditorState().toString())}
                     style={styles.ImageOpacityStyle}>
                     <Icon
                         reverse
@@ -147,7 +153,7 @@ const EditorScreen = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString())}
+                    onPress={() => saveData(props, title, category, _draftRef.current.getEditorState().toString(), true)}
                     style={styles.TouchableOpacityStyle}>
                     <Icon
                         reverse
@@ -170,14 +176,16 @@ const EditorScreen = (props) => {
     );
 };
 
-function navigateToImage(props){
+function navigateToImage(props, title, category, data){
+    saveData(props, title, category, data, false);
+    var currentId = "Note-"+title+"-"+category;
     props.navigation.navigate('Image', {
-        id: id
+        id: currentId
     });
 }
 
 
-async function saveData(props, title, category, data){
+async function saveData(props, title, category, data, navigateBack){
     try{
         var resTitle = title.title;
         if(id!=undefined){
@@ -187,6 +195,7 @@ async function saveData(props, title, category, data){
             resTitle = initTitle;
         }
         if(resTitle != initTitle){
+            console.log("test");
             var keys = await AsyncStorage.getAllKeys();
             for(var i=0; i<keys.length; i++){
                 let key = keys[i];
@@ -203,9 +212,11 @@ async function saveData(props, title, category, data){
         str += "-";
         str += category;
         await AsyncStorage.setItem(str, data.toString());
-        props.navigation.navigate('Notes', {
-            category: category
-        });
+        if(navigateBack){
+            props.navigation.navigate('Notes', {
+                category: category
+            });
+        }
     }catch (err){
         console.log(err);
     }
