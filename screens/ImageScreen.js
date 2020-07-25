@@ -14,6 +14,7 @@ export default class ImageScreen extends Component{
         super();
         this.state= {index: 0, avatarSource: []};
         this.noteId = props.route.params.id;
+        console.log("NOTEID:"+this.noteId);
         this.id = "Image-";
         this.id += this.noteId.split('-')[1] + "-";
         this.id += this.noteId.split('-')[2];

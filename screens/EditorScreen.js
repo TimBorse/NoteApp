@@ -79,7 +79,6 @@ var defaultValue = "";
 var id;
 var initTitle = "";
 var category;
-var currentTitle = "";
 
 const EditorScreen = (props) => {
     const _draftRef = React.createRef();
@@ -88,6 +87,7 @@ const EditorScreen = (props) => {
     const [editorState, setEditorState] = useState("");
     category = props.route.params.category;
     id = props.route.params.id;
+    console.log(id);
     if(id != undefined){
         getData(id);
         initTitle=id.split('-')[1];
@@ -96,7 +96,6 @@ const EditorScreen = (props) => {
 
     const setCurrentTitle = (selectedTitle) => {
         setTitle(selectedTitle)
-        currentTitle = title;
     }
 
 
@@ -177,8 +176,14 @@ const EditorScreen = (props) => {
 };
 
 function navigateToImage(props, title, category, data){
-    var currentId = "Note-"+title.title+"-"+category;
-    saveData(props, title, category, data, false, currentId);
+    var currentId = id;
+    var resTitle = title.title;
+    var newId = currentId;
+    if(resTitle != undefined && resTitle != currentId.split('-')[1]){
+        newId= "Note-"+resTitle+"-"+category;
+    }
+    console.log("CURRENTID:"+currentId);
+    saveData(props, title, category, data, false, newId);
 }
 
 
