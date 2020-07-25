@@ -11,7 +11,7 @@ import {
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import RNDraftView, {getEditorState} from "react-native-draftjs-editor";
 import AsyncStorage from '@react-native-community/async-storage';
-import {Icon} from 'react-native-elements';
+import {Header, Icon} from 'react-native-elements';
 
 const ControlButton = ({ text, action, isActive }) => {
     return (
@@ -120,6 +120,16 @@ const EditorScreen = (props) => {
     }, [_draftRef]);
     return (
         <SafeAreaView style={styles.containerStyle}>
+            <Header
+                backgroundImage={require('../editor.png')}
+                leftComponent={{ icon: 'arrow-back', size:30, color: '#6268b8', onPress: () =>  props.navigation.goBack() }}
+                centerComponent={{ text: '', style: { color: '#6268b8', fontSize:30,fontWeight:"bold", fontStyle:'italic'} }}
+                rightComponent={{ icon: 'home', size:30, color: '#6268b8',onPress: () => props.navigation.navigate('Home') }}
+                containerStyle={{
+                    backgroundColor: "#caebff",
+                    justifyContent: "space-around"
+                }}
+            />
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 placeholder={"Title"}
@@ -242,7 +252,6 @@ async function getData(id){
 const styles = StyleSheet.create({
     containerStyle: {
         flex: 1,
-        marginTop: 36
     },
     toolbarContainer: {
         height: 56,
