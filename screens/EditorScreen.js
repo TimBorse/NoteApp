@@ -79,6 +79,12 @@ const EditorToolBar = ({
                 action={() => toggleStyle("ITALIC")}
             />
             <IconButton
+                name={'strikethrough'}
+                type={'font-awesome'}
+                isActive={activeStyles.includes("STRIKETHROUGH")}
+                action={() => toggleStyle("STRIKETHROUGH")}
+            />
+            <IconButton
                 name={'header'}
                 type={'font-awesome'}
                 isActive={blockType === "header-one"}
@@ -95,12 +101,6 @@ const EditorToolBar = ({
                 type={'font-awesome'}
                 isActive={blockType === "ordered-list-item"}
                 action={() => toggleBlockType("ordered-list-item")}
-            />
-            <IconButton
-                name={'strikethrough'}
-                type={'font-awesome'}
-                isActive={activeStyles.includes("STRIKETHROUGH")}
-                action={() => toggleStyle("STRIKETHROUGH")}
             />
         </View>
     );
