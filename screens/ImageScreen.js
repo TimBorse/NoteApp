@@ -5,26 +5,42 @@ import {StyleSheet, Image, TouchableOpacity, View, Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Header, Icon} from 'react-native-elements';
 
-
+/**
+ * The screen for the images of a note
+ */
 export default class ImageScreen extends Component{
+
     noteId;
     id;
     index;
+
+    /**
+     * Initializes state and data
+     *
+     * @param props: Properties of the screen
+     */
     constructor(props) {
         super();
-        this.state= {index: 0, avatarSource: []};
+        this.state= {index: 0, images: []};
         this.noteId = props.route.params.id;
-        console.log("NOTEID:"+this.noteId);
         this.id = "Image-";
         this.id += this.noteId.split('-')[1] + "-";
         this.id += this.noteId.split('-')[2];
         this.importData();
-        console.log(this.onChangeImage);
     }
+
+    /**
+     * Changes index in state
+     *
+     * @param i: Number to change the index to
+     */
     changeIndex = i => {
        this.setState({index: i});
     }
 
+    /**
+     * Retrieves the images associated to the note from the Async Storage
+     */
     async importData(){
         try {
             var images=[];
@@ -40,11 +56,17 @@ export default class ImageScreen extends Component{
                     }
                 }
             }
-            this.setState({avatarSource: images});
+            this.setState({images: images});
         } catch (error) {
             console.error(error);
         }
     }
+
+    /**
+     * Opens the Image Picker. After the selection it updates the state and saves it to the Async Storage
+     *
+     * Base Source: https://www.npmjs.com/package/react-native-image-picker
+     */
     openImagePicker(){
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response);
@@ -59,21 +81,24 @@ export default class ImageScreen extends Component{
                 const source = { uri: response.uri };
 
                 var images = []
-                const state = this.state.avatarSource;
+                const state = this.state.images;
                 for(var i=0;i<state.length;i++){
                     images.push(state[i]);
                 }
                 var image = {source: source, dimensions: { width: 150, height: 150 }};
                 images.push(image);
-                this.setState({avatarSource: images});
+                this.setState({images: images});
                 this._gallery.getViewPagerInstance().scrollToPage(images.length-1, false)
                 this.saveImages();
             }
         });
     }
 
+    /**
+     * Saves Images to Async Storage
+     */
     async saveImages(){
-        var images = this.state.avatarSource;
+        var images = this.state.images;
         var str = "";
         for(var i=0; i<images.length;i++){
           str += images[i].source.uri;
@@ -87,8 +112,11 @@ export default class ImageScreen extends Component{
         }
     }
 
+    /**
+     * Remove the image which the index of the state points to from Async Storage
+     */
     async removeImage(){
-        var images = this.state.avatarSource;
+        var images = this.state.images;
         var index = this.state.index;
         console.log(index);
         console.log("length:"+ images.length)
@@ -101,10 +129,13 @@ export default class ImageScreen extends Component{
             images.pop();
             this._gallery.getViewPagerInstance().scrollToPage(index-1, false)
         }
-        this.setState({avatarSource: images});
+        this.setState({images: images});
         this.saveImages();
     }
 
+    /**
+     * Renders the elements of this screen
+     */
     render() {
         return (
             <View style={{
@@ -124,7 +155,7 @@ export default class ImageScreen extends Component{
                 <Gallery
                     ref={(c) => { this._gallery = c }}
                     style={{ flex: 1, backgroundColor: 'transparent' }}
-                    images={this.state.avatarSource}
+                    images={this.state.images}
                     onPageSelected={this.changeIndex}
                 />
                 <View style={{flexDirection:'row',justifyContent: 'space-around',marginBottom:10}}>
@@ -164,6 +195,10 @@ export default class ImageScreen extends Component{
         );
     }
 }
+
+/**
+ * The styles of the elements of this screen
+ */
 const styles = StyleSheet.create({FloatingButtonStyle: {
         resizeMode: 'contain',
         width: 75,
@@ -179,9 +214,11 @@ const styles = StyleSheet.create({FloatingButtonStyle: {
         bottom: 30,
     },});
 
+/**
+ *  Options for the Image Picker
+ */
 const options = {
-    title: 'Select Avatar',
-    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    title: 'Select Image',
     storageOptions: {
         skipBackup: true,
         path: 'images',

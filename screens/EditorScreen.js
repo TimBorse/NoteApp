@@ -13,20 +13,18 @@ import RNDraftView, {getEditorState} from "react-native-draftjs-editor";
 import AsyncStorage from '@react-native-community/async-storage';
 import {Header, Icon} from 'react-native-elements';
 
-const ControlButton = ({ text, action, isActive }) => {
-    return (
-        <TouchableOpacity
-            style={[
-                styles.controlButtonContainer,
-                isActive ? { backgroundColor: "gold" } : {}
-            ]}
-            onPress={action}
-        >
-            <Text>{text}</Text>
-        </TouchableOpacity>
-    );
-};
+/**
+ * Base Source: https://www.npmjs.com/package/react-native-draftjs-editor
+ */
 
+/**
+ * Creates an icon as button for the toolbar of the editor
+ *
+ * @param name: Icon name in React Native Elements
+ * @param type: Type of the Icon for React Native Elements
+ * @param action: Action to do onClick
+ * @param isActive: Boolean which determines if the button is currently selected
+ */
 const IconButton = ({ name, type, action, isActive }) => {
     if(isActive){
         return (<Icon
@@ -52,6 +50,14 @@ const IconButton = ({ name, type, action, isActive }) => {
     );
 };
 
+/**
+ * Creates the toolbar for the editor
+ *
+ * @param activeStyles: List of currently active styles
+ * @param blockType: Block Type for the Toolbar
+ * @param toggleStyle: Sets style to given value
+ * @param toggleBlockType: Sets Block Type to given value
+ */
 const EditorToolBar = ({
                            activeStyles,
                            blockType,
@@ -73,7 +79,7 @@ const EditorToolBar = ({
                 action={() => toggleStyle("ITALIC")}
             />
             <IconButton
-                name={'H1'}
+                name={'header'}
                 type={'font-awesome'}
                 isActive={blockType === "header-one"}
                 action={() => toggleBlockType("header-one")}
@@ -100,6 +106,9 @@ const EditorToolBar = ({
     );
 };
 
+/**
+ *  Adds style "STRIKETHROUGH" to style Map
+ */
 const styleMap = {
     STRIKETHROUGH: {
         textDecoration: "line-through"
@@ -111,6 +120,11 @@ var id;
 var initTitle = "";
 var category;
 
+/**
+ * Initializes and renders the EditorScreen
+ *
+ * @param props: Properties of Screen
+ */
 const EditorScreen = (props) => {
     const _draftRef = React.createRef();
     const [activeStyles, setActiveStyles] = useState([]);
@@ -177,7 +191,7 @@ const EditorScreen = (props) => {
                 onBlockTypeChanged={setActiveBlockType}
                 styleMap={styleMap}
             />
-            <View style={{flexDirection: 'row'}}>
+            <View>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => navigateToImage(props, title, category, _draftRef.current.getEditorState().toString())}
@@ -216,6 +230,14 @@ const EditorScreen = (props) => {
     );
 };
 
+/**
+ * Saves the Date of the EditorScreen and navigates to ImageScreen
+ *
+ * @param props: Properties of the screen
+ * @param title: Title of the note
+ * @param category: Category of the note
+ * @param data: Content of the Editor
+ */
 function navigateToImage(props, title, category, data){
     var currentId = id;
     var resTitle = title.title;
@@ -228,7 +250,17 @@ function navigateToImage(props, title, category, data){
 }
 
 
-async function saveData(props, title, category, data, navigateBack, imageId){
+/**
+ * Saves the title and data of the note
+ *
+ * @param props: Properties of the screen
+ * @param title: Title of the Note
+ * @param category: Category of the Note
+ * @param data: Content of the Editor
+ * @param navigateBack: True if it should navigate back after saving, false instead
+ * @param noteId: Id of the note
+ */
+async function saveData(props, title, category, data, navigateBack, noteId){
     try{
         console.log("InitTitle:"+initTitle);
         var resTitle = title.title;
@@ -263,7 +295,7 @@ async function saveData(props, title, category, data, navigateBack, imageId){
             });
         }else{
             props.navigation.navigate('Image', {
-                id: imageId
+                id: noteId
             });
         }
     }catch (err){
@@ -271,6 +303,11 @@ async function saveData(props, title, category, data, navigateBack, imageId){
     }
 }
 
+/**
+ * Gets the content of the note
+ *
+ * @param id: Id of the note
+ */
 async function getData(id){
     try{
         const data = await AsyncStorage.getItem(id);
@@ -280,6 +317,9 @@ async function getData(id){
     }
 }
 
+/**
+ *  Styles of the elements of the screen
+ */
 const styles = StyleSheet.create({
     containerStyle: {
         flex: 1,
@@ -310,8 +350,8 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        left: 30,
-        bottom: 30,
+        right: 30,
+        bottom: 100,
     },
     FloatingButtonStyle: {
         resizeMode: 'contain',
