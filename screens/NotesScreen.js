@@ -13,11 +13,18 @@ import {Header, Divider, Icon} from 'react-native-elements';
 import HtmlText from 'react-native-html-to-text';
 import WebView from 'react-native-webview';
 
+/**
+ * Creates the screen for the notes of the selected category
+ */
 export default class NotesScreen extends Component {
     items=[];
     category;
     focusListener;
 
+    /**
+     * Filters the notes from the Async Storage which are associated to the selected category and
+     * pushes them into the state
+     */
     importData = async () => {
         try {
             this.items=[];
@@ -42,6 +49,12 @@ export default class NotesScreen extends Component {
 
     }
 
+    /**
+     * Reads category from navigation parameters, adds a Listener which gets triggered when the screen
+     * gets into focus again and initializes the state
+     *
+     * @param props: Properties of this class
+     */
     constructor(props) {
         super(props);
         this.category = props.route.params.category;
@@ -51,12 +64,21 @@ export default class NotesScreen extends Component {
         this.state = {refresh: false, items: this.items};
     }
 
+    /**
+     * Rerenders the Flatlist
+     */
     refreshFlatList(){
         this.setState({refresh: !this.state.refresh});
         this.importData();
         this.render();
     }
 
+    /**
+     * Renders the card of one note which as one element of the flatlist
+     *
+     * @param item: The item to render
+     * @param index: The index of this element the flatlist
+     */
     _renderItem = ({item, index}) => {
         let {titleText, contentText, card, cardImage} = styles;
         //ToDo: Redirection to actual note onclick
@@ -94,6 +116,9 @@ export default class NotesScreen extends Component {
         );
     };
 
+    /**
+     * Renders the Flatlist and Floating Button of the Notes Screen
+     */
     render() {
         let {container, FloatingButtonStyle, TouchableOpacityStyle} = styles;
         let {items} = this.state;
@@ -138,6 +163,13 @@ export default class NotesScreen extends Component {
 
         );
     }
+
+    /**
+     * Removes a note from the async storage
+     *
+     * @param key: The key of the note
+     * @returns {Promise<boolean>}: Returns true if it was succesfull, false instead
+     */
     async removeItemValue(key) {
         try {
             await AsyncStorage.removeItem(key);
@@ -150,6 +182,10 @@ export default class NotesScreen extends Component {
         }
     }
 }
+
+/**
+ *  Sets the styles for the elements
+ */
 const styles = StyleSheet.create({
     MainContainer: {
         flex:1,
