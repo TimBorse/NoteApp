@@ -16,14 +16,19 @@ export default class ToDoListScreen extends Component {
             items: this.items,
             refresh: false,
         };
-
-
     }
 
+
+    /**
+     * @param text: setText method sets text in to-Do
+     */
     setText = (text)=> {
         this.setState({toDo: text})
     }
 
+    /**
+     * Flatlist rerendered
+     */
     reloadFlatlist(){
         this.setState({refresh: !this.state.refresh})
         this.importData();
@@ -31,6 +36,11 @@ export default class ToDoListScreen extends Component {
     }
 
 
+    /**
+     * Data from async storage is imported and set into @param items
+     * Data: id, to-Do and checked
+     * parsed because values are JSON Objects
+     */
     importData = async () => {
         try {
             this.items = [];
@@ -53,6 +63,13 @@ export default class ToDoListScreen extends Component {
         this.setState({items: this.items});
     }
 
+
+    /**
+     * @param iditem: id of the item:
+     * state is changed for the specific item
+     * iditem is compared to items.id and passed to res if the same
+     * checked state is changed and updated
+     */
     handleOnPress = (iditem) => {
         var res = this.items.find(obj => { return obj.id === iditem.id})
         res.checked = !iditem.checked
@@ -60,9 +77,15 @@ export default class ToDoListScreen extends Component {
         this.setState({items: this.items});
     }
 
+
+
+    /**
+     * Flatlist items are rendered here.
+     * Has defined View, Checkbox, Text: to-Do and Icon
+     * Checkbox is the state for the to-Do: checked/unchecked
+     **/
     _renderItem = ({item, index}) => {
         let {contentText,card,cardEinzeln} = styles;
-
         return (
             <View style={card}>
                 <View style={cardEinzeln}>
@@ -92,6 +115,10 @@ export default class ToDoListScreen extends Component {
         );
     };
 
+    /**
+     * Renders view for the screen
+     *
+     * */
     render() {
         let {items} = this.state;
         return (
@@ -118,6 +145,7 @@ export default class ToDoListScreen extends Component {
                         <Text style={{color:'black',textAlign:'center',padding:10,fontWeight:"bold"}}>Add</Text>
                     </TouchableOpacity>
                 </View>
+
                 <FlatList
                     style={styles.container}
                     data= {items}
@@ -129,9 +157,17 @@ export default class ToDoListScreen extends Component {
 
         );
     }
-    async saveData(props, toDO){
-        console.log("todofaafaa:"+toDO)
 
+
+    /**
+     * @param props: properties for screen
+     * @param to-DO: to-do is the passed to-Do name
+     * Asked whether to-DO is not empty
+     * to-Do is set with status in datas
+     * Is saved with setItem in DB: toDo_name as key and datas as value (stringify) due to JSON object
+     * reloadFlatlist () is called to update the list immediately
+     */
+    async saveData(props, toDO){
         try{
             if (toDO !== "") {
                 let datas=({
@@ -150,6 +186,10 @@ export default class ToDoListScreen extends Component {
 
     }
 
+    /**
+     * Data will be overwritten to match the transferred @param
+     * @param item: to-Do and status
+     */
     async overrideData(item){
         try{
             if(item.toDo !== ""){
@@ -158,7 +198,6 @@ export default class ToDoListScreen extends Component {
                     status: item.checked
                 });
                 var toDo_name = "toDo-" + item.toDo;
-                console.log(JSON.stringify(datas))
                 await AsyncStorage.setItem(toDo_name,JSON.stringify(datas));
             }
 
@@ -166,6 +205,12 @@ export default class ToDoListScreen extends Component {
         console.log(err);
     }
     }
+
+    /**
+     * Item is deleted from the DB with the key
+     * and reloadFlatlist is called to update the list immediately
+     * @param key: id of item
+     */
     async removeItemValue(key) {
         try {
             await AsyncStorage.removeItem(key);

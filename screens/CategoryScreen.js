@@ -4,14 +4,15 @@ import {
     StyleSheet,
     Text,
     View,
-    Alert,
-    Image, TextInput, FlatList,
+    TextInput, FlatList,
 } from 'react-native';
 import {Header, Icon} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
+/**
+ * Source Base for Modal: https://medium.com/@alexb72/how-to-create-your-first-modal-popup-for-your-react-native-app-5e50b24d3df1
+ */
 
 export default class CategoryClass extends Component {
     items = [];
@@ -19,7 +20,6 @@ export default class CategoryClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            is2ndModal:false,
             isModalVisible:false,
             is2ModalVisible:false,
             category: "",
@@ -32,37 +32,26 @@ export default class CategoryClass extends Component {
         })
     }
 
+    /**
+     * Flatlist rerendered
+     */
     refreshFlatlist(){
         this.setState({refresh: !this.state.refresh});
         this.importData();
         this.render();
     }
 
-    openModal = () =>{
-        if (this.state.is2ndModal===false){
-            this.setState({
-                isModalVisible:true
-            })
-        }else{
-            this.setState({
-                is2ModalVisible:true
-            })
-        }
-
-    }
-
-    closeModal = () =>{
-        this.setState({
-            isModalVisible:false,
-            is2ModalVisible:false
-        })
-    }
-
+    /**
+     * setText method sets text in to-Do
+     * @param text: text for category name
+     */
     setText = (text)=> {
     this.setState({category: text})
 }
-
-
+    /**
+     * Data from async storage is imported and set into @param items
+     * Data: id and category
+     */
     importData = async () => {
         try {
             this.items = [];
@@ -71,7 +60,6 @@ export default class CategoryClass extends Component {
                 let key = keys[i];
                 if(key.startsWith("category")){
                     let category = await AsyncStorage.getItem(keys[i]);
-                    console.log(key);
                     this.items.push({
                         category: category,
                         id: key,
@@ -84,6 +72,11 @@ export default class CategoryClass extends Component {
         this.setState({items: this.items});
     }
 
+    /**
+     * Flatlist items are rendered here.
+     * Has defined View, Checkbox, Text: to-Do and Icon
+     * Checkbox is the state for the to-Do: checked/unchecked
+     **/
     _renderItem = ({item, index}) => {
         console.log(item.category);
         let {contentText,card,cardEinzeln} = styles;
@@ -111,7 +104,10 @@ export default class CategoryClass extends Component {
         );
     };
 
-
+    /**
+     * Renders view for the screen
+     * With 2 Modals that are opened/closed when buttons are pressed
+     * */
     render() {
         console.log(this.state.items.length);
         let {items} = this.state;
@@ -136,7 +132,11 @@ export default class CategoryClass extends Component {
                 />
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={this.openModal}
+                    onPress={() =>{
+                        this.setState({
+                            isModalVisible:true,
+                        })
+                    }}
                     style={styles.TouchableOpacityStyle}>
                     <Icon
                         raised
@@ -147,6 +147,8 @@ export default class CategoryClass extends Component {
                     >
                     </Icon>
                 </TouchableOpacity>
+
+
                 <Modal animationIn="slideInUp" animationOut="slideOutDown"
                        isVisible={this.state.isModalVisible}
                        >
@@ -160,12 +162,18 @@ export default class CategoryClass extends Component {
                             <View style={{flexDirection:'row',}}>
                                 <TouchableOpacity
                                     style={{backgroundColor:'#81f681',width:'50%'}}
-                                    onPress={() => {this.saveData(this.props, this.state.category, this.state.category); this.closeModal();}}>
+                                    onPress={() => {this.saveData(this.props, this.state.category, this.state.category); {
+                                        this.setState({
+                                            isModalVisible:false,
+                                        })}}}>
                                     <Text style={{color:'black',textAlign:'center',padding:10}}>Save</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={{backgroundColor:'#f89494',width:'50%', type:"outline"}}
-                                    onPress={()=>this.closeModal()}>
+                                    onPress={() =>{
+                                        this.setState({
+                                            isModalVisible:false,
+                                        })}}>
                                     <Text style={{color:'black',textAlign:'center',padding:10}}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>
@@ -206,6 +214,12 @@ export default class CategoryClass extends Component {
 
         );
     }
+
+    /**
+     *
+     * @param key
+     *
+     */
     async removeItemValue(key) {
         try {
             await AsyncStorage.removeItem(key);
@@ -217,12 +231,20 @@ export default class CategoryClass extends Component {
         }
     }
 
-    async saveData(props, category, data){
+    /**
+     * @param props: properties for screen
+     * @param category: category name from setState is passed
+     * Asked whether category is not empty
+     * Is saved with setItem in DB: category_name as key and category as value
+     * refreshFlatlist() is called to update the list immediately
+     */
+    async saveData(props, category){
         try{
-            var category_name = "category-"+category;
-            await AsyncStorage.setItem(category_name, data.toString());
-            this.refreshFlatlist();
-
+            if (category !== "") {
+                var category_name = "category-" + category;
+                await AsyncStorage.setItem(category_name, category.toString());
+                this.refreshFlatlist();
+            }
         }catch (err){
             console.log(err);
         }

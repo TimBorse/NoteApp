@@ -1,11 +1,19 @@
-// Homescreen.js
 import React, {Component} from 'react';
 import {View, ImageBackground} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 
+/**
+ * Class for Homescreen defined here
+ */
 export default class HomeScreen extends Component {
+    /**
+     * rendering elements for the screen:
+     * Imagebackground and View with Buttons defined here
+     * Buttons navigate to the other screens on onPress: Category & ToDoList Screen
+     */
     render() {
         return (
+
             <ImageBackground style={{width: '100%', height: '100%'}} source={require('../resources/Start.png')} resizeMethod={'scale'}>
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection:'column'}}>
                 <Button
