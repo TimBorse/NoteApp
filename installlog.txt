@@ -1,0 +1,9 @@
+- den Projektordner erstellen
+- die zip-Datei dort entpacken
+- im command prompt (oder node) zum Projektordner navigieren
+- npm install  ausführen
+- dependencies durch command linken:
+	- npx react-native link react-native-image-picker
+	- npx react-native link react-native-vector-icons
+	- npx react-native link react-native-webview
+- app starten: npx react-native run-android
